@@ -1,0 +1,15 @@
+version: '3.3'
+
+services:
+  mongodb:
+    image: mongo:5.0.6
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: 'where-is-your-mask'
+    ports:
+      - "27017:27017"
+    volumes:
+      - mask_mongo:/var/lib/mongo
+
+volumes:
+  mask_mongo:
