@@ -1,42 +1,128 @@
-import { useMount } from 'react-use';
-import { useRef } from 'react';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader';
-import { AxesHelper, PerspectiveCamera, Scene, WebGLRenderer } from 'three';
+import { Divider, Group, Space, Title } from '@mantine/core';
+import fabricMaskImg from 'theme/images/fabric-mask.jpg';
+import medicalMaskImg from 'theme/images/medical-mask.jpg';
+import MaskTypeCard from 'features/landing/MaskTypeCard';
+import CollectionPreview from 'features/landing/CollectionPreview';
 
-const Landing = () => {
-  const containerRef = useRef();
-
-  useMount(() => {
-    const scene = new Scene();
-
-    scene.add(new AxesHelper(5));
-
-    const camera = new PerspectiveCamera(75, 1, 0.1, 1000);
-    camera.position.set(3, 3, 3);
-
-    const renderer = new WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setSize(800, 800);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    
-    document.body.appendChild(renderer.domElement);
-
-    new OrbitControls(camera, renderer.domElement);
-
-    const loader = new ColladaLoader();
-    loader.load('http://localhost:3000/model.xml', (mask) => {
-      scene.add(mask.scene);
-    });
-
-    const animate = () => {
-      requestAnimationFrame(animate);
-      renderer.render(scene, camera);
-    };
-
-    animate();
-  });
-
-  return <div ref={containerRef} />;
-};
+const Landing = () => (
+  <>
+    <Title order={2}>Select a face mask to customize</Title>
+    <Space h="md" />
+    <Group align="center" position="center" spacing="xl">
+      <MaskTypeCard
+        title="Fabric Mask"
+        description="Reusable and durable yet less effective mask"
+        imgSrc={fabricMaskImg}
+        modelingLink="/fabric/design"
+      />
+      <MaskTypeCard
+        title="Medical Mask"
+        description="Protectiveness over convenience"
+        imgSrc={medicalMaskImg}
+        modelingLink="/medical/design"
+      />
+    </Group>
+    <Space h="xl" />
+    <Title order={2}>Choose from our collections</Title>
+    <Space h="md" />
+    <CollectionPreview
+      type="Fabric Masks"
+      collections={[
+        {
+          id: 1,
+          name: 'Autumn Collection',
+          description: 'Description Description Description Description Description',
+          imageSrc: fabricMaskImg,
+        },
+        {
+          id: 2,
+          name: 'Autumn Collection',
+          description: 'Description Description Description Description Description',
+          imageSrc: fabricMaskImg,
+        },
+        {
+          id: 3,
+          name: 'Autumn Collection',
+          description: 'Description Description Description Description Description',
+          imageSrc: fabricMaskImg,
+        },
+        {
+          id: 4,
+          name: 'Autumn Collection',
+          description: 'Description Description Description Description Description',
+          imageSrc: fabricMaskImg,
+        },
+        {
+          id: 5,
+          name: 'Autumn Collection',
+          description: 'Description Description Description Description Description',
+          imageSrc: fabricMaskImg,
+        },
+        {
+          id: 6,
+          name: 'Autumn Collection',
+          description: 'Description Description Description Description Description',
+          imageSrc: fabricMaskImg,
+        },
+        {
+          id: 7,
+          name: 'Autumn Collection',
+          description: 'Description Description Description Description Description',
+          imageSrc: fabricMaskImg,
+        },
+      ]}
+    />
+    <Space h="xl" />
+    <Divider />
+    <Space h="xl" />
+    <CollectionPreview
+      type="Medical Masks"
+      collections={[
+        {
+          id: 1,
+          name: 'Autumn Collection',
+          description: 'Description Description Description Description Description',
+          imageSrc: medicalMaskImg,
+        },
+        {
+          id: 2,
+          name: 'Autumn Collection',
+          description: 'Description Description Description Description Description',
+          imageSrc: medicalMaskImg,
+        },
+        {
+          id: 3,
+          name: 'Autumn Collection',
+          description: 'Description Description Description Description Description',
+          imageSrc: medicalMaskImg,
+        },
+        {
+          id: 4,
+          name: 'Autumn Collection',
+          description: 'Description Description Description Description Description',
+          imageSrc: medicalMaskImg,
+        },
+        {
+          id: 5,
+          name: 'Autumn Collection',
+          description: 'Description Description Description Description Description',
+          imageSrc: medicalMaskImg,
+        },
+        {
+          id: 6,
+          name: 'Autumn Collection',
+          description: 'Description Description Description Description Description',
+          imageSrc: medicalMaskImg,
+        },
+        {
+          id: 7,
+          name: 'Autumn Collection',
+          description: 'Description Description Description Description Description',
+          imageSrc: medicalMaskImg,
+        },
+      ]}
+    />
+  </>
+);
 
 export default Landing;
