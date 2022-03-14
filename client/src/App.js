@@ -5,25 +5,28 @@ import Layout from 'features/layout/Layout';
 import IndexPage from 'pages/IndexPage';
 import FabricMaskModelingPage from 'pages/fabric/FabricMaskModelingPage';
 import MedicalMaskModelingPage from 'pages/medical/MedicalMaskModelingPage';
+import { CartProvider } from 'core/cart';
 
 const App = () => (
   <MantineProvider theme={THEME} withNormalizeCSS withGlobalStyles>
     <TypographyStylesProvider>
-      <Layout>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/">
-              <Route exact index element={<IndexPage />} />
-              <Route path="fabric">
-                <Route exact path="design" element={<FabricMaskModelingPage />} />
+      <CartProvider>
+        <Layout>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/">
+                <Route exact index element={<IndexPage />} />
+                <Route path="fabric">
+                  <Route exact path="design" element={<FabricMaskModelingPage />} />
+                </Route>
+                <Route path="medical">
+                  <Route exact path="design" element={<MedicalMaskModelingPage />} />
+                </Route>
               </Route>
-              <Route path="medical">
-                <Route exact path="design" element={<MedicalMaskModelingPage />} />
-              </Route>
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </Layout>
+            </Routes>
+          </BrowserRouter>
+        </Layout>
+      </CartProvider>
     </TypographyStylesProvider>
   </MantineProvider>
 );
