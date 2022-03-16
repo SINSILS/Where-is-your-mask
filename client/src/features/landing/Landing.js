@@ -1,7 +1,9 @@
 import { Divider, Group, Space, Title } from '@mantine/core';
 import fabricMaskImg from 'theme/images/fabric-mask.jpg';
 import medicalMaskImg from 'theme/images/medical-mask.jpg';
+import birdsMaskImg from 'theme/images/birds-are-leaving.jpg';
 import MaskTypeCard from 'features/landing/MaskTypeCard';
+import Collection from 'features/collection/Collection';
 import CollectionPreview from 'features/landing/CollectionPreview';
 
 const Landing = () => (
@@ -25,6 +27,15 @@ const Landing = () => (
     <Space h="xl" />
     <Title order={2}>Choose from our collections</Title>
     <Space h="md" />
+    <Group align="center" position="center" spacing="xl">
+      <Collection
+        title="Autumn collection"
+        description="Choose one, that fits you best"
+        imgSrc={birdsMaskImg}
+        modelingLink="/fabric/collection"
+      />
+    </Group>
+    <Space h="xl" />
     <CollectionPreview
       type="Fabric Masks"
       collections={[
@@ -74,7 +85,6 @@ const Landing = () => (
     />
     <Space h="xl" />
     <Divider />
-    <Space h="xl" />
     <CollectionPreview
       type="Medical Masks"
       collections={[
