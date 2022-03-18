@@ -5,3 +5,5 @@ mongodb_username = config('MONGODB_USERNAME', default=None)
 mongodb_password = config('MONGODB_PASSWORD', default=None)
 mongodb_database = config('MONGODB_DATABASE')
 mongodb_port = config('MONGODB_PORT', cast=int)
+
+web_url = config('WEB_URL')

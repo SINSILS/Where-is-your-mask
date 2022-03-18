@@ -1,5 +1,6 @@
-import { Button, Card, createStyles, Image, Space, Text, Title } from '@mantine/core';
+import { Button, Card, createStyles, Space, Text, Title } from '@mantine/core';
 import { NavLink } from 'react-router-dom';
+import Image from 'shared/Image';
 
 const useStyles = createStyles({
   card: {

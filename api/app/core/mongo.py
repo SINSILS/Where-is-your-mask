@@ -1,5 +1,6 @@
 from pymongo import MongoClient
-import src.core.config as config
+from gridfs import GridFS
+import app.core.config as config
 
 client = MongoClient(
     host=config.mongodb_host,
@@ -9,3 +10,4 @@ client = MongoClient(
 )
 
 db = client.get_database(config.mongodb_database)
+fs = GridFS(db)

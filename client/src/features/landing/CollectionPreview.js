@@ -1,4 +1,5 @@
-import { Box, Button, createStyles, Image, SimpleGrid, Space, Text } from '@mantine/core';
+import { Box, Button, createStyles, SimpleGrid, Space, Text } from '@mantine/core';
+import Image from 'shared/Image';
 
 const BOX_SIZE = 250;
 const BORDER_SIZE = 2;
