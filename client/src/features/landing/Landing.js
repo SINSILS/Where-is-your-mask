@@ -25,7 +25,7 @@ const Landing = () => (
       />
     </Group>
     <Space h="xl" />
-    <Title order={2}>Choose from our collections</Title>
+    <Title order={2}>Choose from kkkkkkkkkkk collections</Title>
     <Space h="md" />
     <Group align="center" position="center" spacing="xl">
       <Collection
