@@ -5,6 +5,7 @@
   "dependencies": {
     "@mantine/core": "^3.6.14",
     "@mantine/dropzone": "^3.6.14",
+    "@mantine/form": "^4.0.6",
     "@mantine/hooks": "^3.6.14",
     "@mantine/modals": "^3.6.14",
     "@mantine/notifications": "^3.6.14",
@@ -21,7 +22,8 @@
     "react-router-dom": "^6.2.2",
     "react-scripts": "5.0.0",
     "react-use": "^17.3.2",
-    "three": "^0.138.3"
+    "three": "^0.138.3",
+    "yup": "^0.32.11"
   },
   "scripts": {
     "start": "react-scripts start",

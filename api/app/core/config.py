@@ -7,3 +7,8 @@ mongodb_database = config('MONGODB_DATABASE')
 mongodb_port = config('MONGODB_PORT', cast=int)
 
 web_url = config('WEB_URL')
+
+jwt_secret = config('JWT_SECRET')
+
+admin_email = config('ADMIN_EMAIL')
+admin_password = config('ADMIN_PASSWORD')

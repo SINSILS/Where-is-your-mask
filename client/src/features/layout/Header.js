@@ -1,6 +1,7 @@
-import { ActionIcon, Container, createStyles, Header as HeaderWrapper } from '@mantine/core';
-import { CartIcon } from 'theme/icons';
+import { ActionIcon, Container, createStyles, Group, Header as HeaderWrapper } from '@mantine/core';
+import { CartIcon, SignOutIcon } from 'theme/icons';
 import { useCart } from 'core/cart';
+import { useUser } from 'core/user';
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -31,7 +32,7 @@ const useStyles = createStyles((theme) => ({
   cartSizeNonEmpty: {
     backgroundColor: theme.colors.green[5],
   },
-  cart: {
+  icon: {
     height: 25,
     width: 25,
   },
@@ -42,16 +43,27 @@ const Header = (props) => {
     items: { length: cartItemsCount },
   } = useCart();
 
+  const { isAdmin, logout } = useUser();
+
   const { classes, cx } = useStyles();
 
   return (
     <HeaderWrapper padding="xs" {...props}>
       <Container size="xl" className={classes.container}>
         <span>Logo</span>
-        <ActionIcon color="blue" size="lg" className={classes.cartContainer}>
-          <span className={cx(classes.cartSize, cartItemsCount > 0 && classes.cartSizeNonEmpty)}>{cartItemsCount}</span>
-          <CartIcon height={23} width={23} className={classes.cart} />
-        </ActionIcon>
+        <Group>
+          <ActionIcon color="blue" size="lg" className={classes.cartContainer}>
+            <span className={cx(classes.cartSize, cartItemsCount > 0 && classes.cartSizeNonEmpty)}>
+              {cartItemsCount}
+            </span>
+            <CartIcon height={23} width={23} className={classes.icon} />
+          </ActionIcon>
+          {isAdmin && (
+            <ActionIcon color="blue" size="lg" onClick={logout}>
+              <SignOutIcon className={classes.icon} />
+            </ActionIcon>
+          )}
+        </Group>
       </Container>
     </HeaderWrapper>
   );

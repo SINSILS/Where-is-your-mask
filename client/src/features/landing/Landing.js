@@ -84,7 +84,6 @@ const Landing = () => (
       ]}
     />
     <Space h="xl" />
-    <Divider />
     <CollectionPreview
       type="Medical Masks"
       collections={[
