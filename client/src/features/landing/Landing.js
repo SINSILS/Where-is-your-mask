@@ -1,4 +1,4 @@
-import { Divider, Group, Space, Title } from '@mantine/core';
+import { Group, Space, Title } from '@mantine/core';
 import fabricMaskImg from 'theme/images/fabric-mask.jpg';
 import medicalMaskImg from 'theme/images/medical-mask.jpg';
 import birdsMaskImg from 'theme/images/birds-are-leaving.jpg';

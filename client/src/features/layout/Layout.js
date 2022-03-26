@@ -10,6 +10,9 @@ const useStyles = createStyles({
     flexDirection: 'column',
     justifyContent: 'space-between',
   },
+  container: {
+    width: '100%',
+  },
 });
 
 const Layout = ({ children }) => {
@@ -17,7 +20,9 @@ const Layout = ({ children }) => {
 
   return (
     <AppShell padding={0} fixed header={<Header height={HEADER_HEIGHT} />} classNames={{ main: classes.main }}>
-      <Container size="xl">{children}</Container>
+      <Container size="xl" className={classes.container}>
+        {children}
+      </Container>
       <Footer />
     </AppShell>
   );
