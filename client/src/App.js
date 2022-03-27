@@ -6,8 +6,9 @@ import IndexPage from 'pages/IndexPage';
 import FabricMaskModelingPage from 'pages/fabric/FabricMaskModelingPage';
 import MedicalMaskModelingPage from 'pages/medical/MedicalMaskModelingPage';
 import { CartProvider } from 'core/cart';
-import CollectionPage from './pages/fabric/CollectionPage';
+import CollectionPage from 'pages/CollectionPage';
 import LoginPage from 'pages/admin/LoginPage';
+import CollectionListPage from 'pages/CollectionListPage';
 import { UserProvider, useUser } from 'core/user';
 
 const Routing = () => {
@@ -32,9 +33,8 @@ const Routing = () => {
           <Route path="medical">
             <Route exact path="design" element={<MedicalMaskModelingPage />} />
           </Route>
-          <Route path="fabric">
-            <Route exact path="collection" element={<CollectionPage />} />
-          </Route>
+          <Route exact path="Collection" element={<CollectionPage />} />
+          <Route exact path="AllCollections" element={<CollectionListPage />} />
         </Route>
       </Routes>
     </Layout>
