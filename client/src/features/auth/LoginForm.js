@@ -42,8 +42,8 @@ const LoginForm = () => {
     });
 
   return (
-    <Paper shadow="xs" mx="auto" mt={100}>
-      <form onSubmit={form.onSubmit(handleLogin)} className={classes.form}>
+    <Paper shadow="xs" mx="auto" mt={100} className={classes.form}>
+      <form onSubmit={form.onSubmit(handleLogin)} >
         <Text weight={600} size="lg" mb="md">
           Login as an Administrator
         </Text>

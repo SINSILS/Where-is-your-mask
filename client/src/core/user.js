@@ -38,14 +38,19 @@ export const UserProvider = ({ children }) => {
     navigate('/');
   }, [navigate]);
 
+  const handleSetAccessToken = useCallback((token) => {
+    setAccessToken(token);
+    setIsAdmin(true);
+  }, []);
+
   const contextValue = useMemo(
     () => ({
       isAdmin,
       isLoading,
-      setAccessToken,
+      setAccessToken: handleSetAccessToken,
       logout: handleLogout,
     }),
-    [isAdmin, isLoading, handleLogout],
+    [isAdmin, isLoading, handleLogout, handleSetAccessToken],
   );
 
   return <context.Provider value={contextValue}>{children}</context.Provider>;
