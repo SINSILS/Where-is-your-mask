@@ -1,36 +1,17 @@
-import { Helmet } from 'react-helmet';
-import { Group, Space, Title } from '@mantine/core';
-import MaskTypeCard from 'features/landing/MaskTypeCard';
 import fabricMaskImg from 'theme/images/fabric-mask.jpg';
-import medicalMaskImg from 'theme/images/medical-mask.jpg';
+import birdsMaskImg from 'theme/images/birds-are-leaving.jpg';
 import CollectionsList from 'shared/CollectionsList';
+import { Helmet } from 'react-helmet';
+import { Space, Title } from '@mantine/core';
 
-const IndexPage = () => (
+const CollectionListPage = () => (
   <>
     <Helmet>
-      <title>Design your own face mask - VELK</title>
+      <title>Choose from our collections - VELK</title>
     </Helmet>
-    <Title order={2}>Select a face mask to customize</Title>
-    <Space h="md" />
-    <Group align="center" position="center" spacing="xl">
-      <MaskTypeCard
-        title="Fabric Mask"
-        description="Reusable and durable yet less effective mask"
-        imgSrc={fabricMaskImg}
-        modelingLink="/fabric/design"
-      />
-      <MaskTypeCard
-        title="Medical Mask"
-        description="Protectiveness over convenience"
-        imgSrc={medicalMaskImg}
-        modelingLink="/medical/design"
-      />
-    </Group>
-    <Space h="md" />
-    <Title order={2}>Choose from our collections</Title>
+    <Title order={2}>Our collections</Title>
     <Space h="md" />
     <CollectionsList
-      withNavigationToList
       collections={[
         {
           id: 1,
@@ -52,31 +33,37 @@ const IndexPage = () => (
         },
         {
           id: 4,
-          name: 'Autumn Collection',
+          name: 'Holiday Collection',
           description: 'Description Description Description Description Description',
-          imageSrc: medicalMaskImg,
+          imageSrc: birdsMaskImg,
         },
         {
           id: 5,
           name: 'Valentine day Collection',
           description: 'Description Description Description Description Description',
-          imageSrc: medicalMaskImg,
+          imageSrc: fabricMaskImg,
         },
         {
           id: 6,
           name: 'Winter Collection',
           description: 'Description Description Description Description Description',
-          imageSrc: fabricMaskImg,
+          imageSrc: birdsMaskImg,
         },
         {
           id: 7,
-          name: 'Holiday Collection',
+          name: 'Winter Collection',
           description: 'Description Description Description Description Description',
-          imageSrc: fabricMaskImg,
+          imageSrc: birdsMaskImg,
+        },
+        {
+          id: 8,
+          name: 'Winter Collection',
+          description: 'Description Description Description Description Description',
+          imageSrc: birdsMaskImg,
         },
       ]}
     />
   </>
 );
 
-export default IndexPage;
+export default CollectionListPage;

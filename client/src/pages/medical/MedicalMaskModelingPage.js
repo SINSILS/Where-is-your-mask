@@ -4,7 +4,7 @@ import Modeling from 'features/modeling/Modeling';
 const MedicalMaskModelingPage = () => (
   <>
     <Helmet>
-      <title>Design your own medical mask - Where is your mask?</title>
+      <title>Design your own medical mask - VELK</title>
     </Helmet>
     <Modeling />
   </>

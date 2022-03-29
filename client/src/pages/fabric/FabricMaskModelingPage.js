@@ -4,7 +4,7 @@ import Modeling from 'features/modeling/Modeling';
 const FabricMaskModelingPage = () => (
   <>
     <Helmet>
-      <title>Design your own fabric mask - Where is your mask?</title>
+      <title>Design your own fabric mask - VELK</title>
     </Helmet>
     <Modeling />
   </>

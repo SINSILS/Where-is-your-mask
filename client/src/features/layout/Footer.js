@@ -16,7 +16,7 @@ const Footer = () => {
     <Box className={classes.wrapper}>
       <Container size="xl">
         <Text weight={600} color="white" size="md">
-          Where is your mask?
+          VELK
         </Text>
         <Text weight={500} color="white" size="xs">
           Copyright © 2022

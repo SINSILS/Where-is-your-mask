@@ -1,7 +1,10 @@
-import { ActionIcon, Container, createStyles, Group, Header as HeaderWrapper } from '@mantine/core';
+import { ActionIcon, Anchor, Container, createStyles, Group, Header as HeaderWrapper } from '@mantine/core';
 import { CartIcon, SignOutIcon } from 'theme/icons';
 import { useCart } from 'core/cart';
 import { useUser } from 'core/user';
+import Image from 'shared/Image';
+import logoImage from 'theme/images/logo.png';
+import { NavLink } from 'react-router-dom';
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -9,6 +12,14 @@ const useStyles = createStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     height: '100%',
+  },
+  logoLink: {
+    marginRight: theme.spacing.lg,
+  },
+  logo: {
+    '& img': {
+      marginBottom: 0,
+    },
   },
   cartContainer: {
     position: 'relative',
@@ -50,7 +61,14 @@ const Header = (props) => {
   return (
     <HeaderWrapper padding="xs" {...props}>
       <Container size="xl" className={classes.container}>
-        <span>Logo</span>
+        <Group>
+          <NavLink to="/" className={classes.logoLink}>
+            <Image src={logoImage} alt="Logo" height={40} radius="sm" className={classes.logo} />
+          </NavLink>
+          <Anchor component={NavLink} to="/collections">
+            Collections
+          </Anchor>
+        </Group>
         <Group>
           <ActionIcon color="blue" size="lg" className={classes.cartContainer}>
             <span className={cx(classes.cartSize, cartItemsCount > 0 && classes.cartSizeNonEmpty)}>

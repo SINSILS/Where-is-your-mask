@@ -1,6 +1,6 @@
 import { Box, Button, createStyles, SimpleGrid, Space, Text } from '@mantine/core';
 import Image from 'shared/Image';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const BOX_SIZE = 250;
 const BORDER_SIZE = 2;
@@ -84,7 +84,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
   };
 });
 
-const CollectionPreview = ({showButton, collections }) => {
+const CollectionsList = ({ withNavigationToList, collections }) => {
   const { classes } = useStyles();
 
   return (
@@ -98,7 +98,13 @@ const CollectionPreview = ({showButton, collections }) => {
       ]}
     >
       {collections.map((x) => (
-        <Button variant="light" key={x.id} className={classes.collectionBox} component={Link} to="Collection">
+        <Button
+          variant="light"
+          key={x.id}
+          className={classes.collectionBox}
+          component={Link}
+          to={`/collections/${x.id}`}
+        >
           <Box className={classes.collectionOverlay}>
             <Text color="white" weight={600} size="xl">
               {x.name}
@@ -118,13 +124,13 @@ const CollectionPreview = ({showButton, collections }) => {
           />
         </Button>
       ))}
-      {showButton && (
-      <Button variant="light" className={classes.viewMoreBox} size="lg" component={Link} to="AllCollections">
-        View more
-      </Button>
+      {withNavigationToList && (
+        <Button variant="light" className={classes.viewMoreBox} size="lg" component={Link} to="/collections">
+          View more
+        </Button>
       )}
     </SimpleGrid>
   );
 };
 
-export default CollectionPreview;
+export default CollectionsList;

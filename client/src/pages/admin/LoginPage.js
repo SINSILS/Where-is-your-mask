@@ -4,7 +4,7 @@ import LoginForm from 'features/auth/LoginForm';
 const LoginPage = () => (
   <>
     <Helmet>
-      <title>Administrator - Where is your mask?</title>
+      <title>Administrator - VELK</title>
     </Helmet>
     <LoginForm />
   </>
