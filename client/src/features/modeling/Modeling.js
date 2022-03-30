@@ -97,9 +97,9 @@ const Modeling = () => {
         setLoadingMaterialsCount((prev) => prev - 1);
       });
 
-      new TextureLoader().load('/models/material/outer-fabric.jpeg', (texture) => {
+      new TextureLoader().load('/models/material/outer-fabric-new.jpeg', (texture) => {
         mask.scene.getObjectByName('main_Design_area').material.map = texture;
-        mask.scene.getObjectByName('main_Design_area').material.color = new Color('skyblue');
+        mask.scene.getObjectByName('main_Design_area').material.color.set('#485754');
         console.log(mask.scene.getObjectByName('main_Design_area'));
         setLoadingMaterialsCount((prev) => prev - 1);
       });
