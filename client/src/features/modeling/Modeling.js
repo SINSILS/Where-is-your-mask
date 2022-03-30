@@ -12,12 +12,17 @@ import {
 } from 'three';
 import { Box, Button, createStyles, Group, Paper, Title } from '@mantine/core';
 
-const modelHeight = 800;
+const otherContentSize = 225;
+const panelWidth = 450;
+const contentGap = 50;
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
+    alignItems: 'flex-end',
+    boxSizing: 'border-box',
+    paddingTop: contentGap,
     justifyContent: 'space-between',
-    height: 'calc(100vh - 175px)',
+    height: `calc(100vh - ${otherContentSize - contentGap}px)`,
     width: '100%',
   },
   modeling: {
@@ -27,8 +32,8 @@ const useStyles = createStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    height: modelHeight,
-    width: 450,
+    height: '100%',
+    width: panelWidth,
   },
   title: {
     textAlign: 'center',
@@ -38,18 +43,26 @@ const useStyles = createStyles((theme) => ({
 
 const Modeling = () => {
   const modelingContainerRef = useRef();
+  const wrapperRef = useRef();
+
   const [loadingMaterialsCount, setLoadingMaterialsCount] = useState(2);
 
   const { classes } = useStyles();
 
   useEffect(() => {
+    const getModelSize = () => ({
+      width: wrapperRef.current.clientWidth - panelWidth - contentGap,
+      height: window.innerHeight - otherContentSize,
+    });
+
     const scene = new Scene();
 
     const camera = new PerspectiveCamera(4);
     camera.position.set(3, 3, 3);
 
     const renderer = new WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setSize(modelHeight, modelHeight);
+    const rendererSize = getModelSize();
+    renderer.setSize(rendererSize.width, rendererSize.height);
     renderer.setPixelRatio(window.devicePixelRatio);
 
     modelingContainerRef.current.appendChild(renderer.domElement);
@@ -88,13 +101,23 @@ const Modeling = () => {
       renderer.render(scene, camera);
     };
 
-    animate();
+    const handleResize = () => {
+      const size = getModelSize();
 
-    return () => renderer.domElement.remove();
+      renderer.setSize(size.width, size.height);
+    };
+
+    animate();
+    window.addEventListener('resize', handleResize, { passive: true });
+
+    return () => {
+      renderer.domElement.remove();
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   return (
-    <Group className={classes.wrapper}>
+    <Group ref={wrapperRef} className={classes.wrapper}>
       <Box className={classes.modeling}>
         <div ref={modelingContainerRef} style={{ visibility: loadingMaterialsCount === 0 ? 'visible' : 'hidden' }} />
       </Box>
