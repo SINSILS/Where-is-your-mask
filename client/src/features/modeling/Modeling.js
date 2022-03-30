@@ -9,6 +9,7 @@ import {
   Scene,
   TextureLoader,
   WebGLRenderer,
+  Color,
 } from 'three';
 import { Box, Button, createStyles, Group, Paper, Title } from '@mantine/core';
 
@@ -50,10 +51,16 @@ const Modeling = () => {
   const { classes } = useStyles();
 
   useEffect(() => {
-    const getModelSize = () => ({
-      width: wrapperRef.current.clientWidth - panelWidth - contentGap,
-      height: window.innerHeight - otherContentSize,
-    });
+    const getModelSize = () => {
+      const width = wrapperRef.current.clientWidth - panelWidth - contentGap;
+      const height = window.innerHeight - otherContentSize;
+      const size = Math.min(width, height, 800);
+
+      return {
+        width: size,
+        height: size,
+      };
+    };
 
     const scene = new Scene();
 
@@ -92,6 +99,8 @@ const Modeling = () => {
 
       new TextureLoader().load('/models/material/outer-fabric.jpeg', (texture) => {
         mask.scene.getObjectByName('main_Design_area').material.map = texture;
+        mask.scene.getObjectByName('main_Design_area').material.color = new Color('skyblue');
+        console.log(mask.scene.getObjectByName('main_Design_area'));
         setLoadingMaterialsCount((prev) => prev - 1);
       });
     });
