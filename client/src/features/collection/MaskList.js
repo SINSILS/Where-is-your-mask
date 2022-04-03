@@ -1,5 +1,5 @@
 import { Button, SimpleGrid, Text, Card, Title, Modal, Group, NumberInput, Space, createStyles } from '@mantine/core';
-import Image from 'shared/Image';
+import Image from 'shared/components/Image';
 import { useState } from 'react';
 import { useCart } from 'core/cart';
 

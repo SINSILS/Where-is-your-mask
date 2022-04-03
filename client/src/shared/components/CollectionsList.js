@@ -1,5 +1,5 @@
 import { Box, Button, createStyles, SimpleGrid, Space, Text } from '@mantine/core';
-import Image from 'shared/Image';
+import Image from 'shared/components/Image';
 import { Link } from 'react-router-dom';
 
 const BOX_SIZE = 250;

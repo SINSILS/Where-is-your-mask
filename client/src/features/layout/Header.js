@@ -2,7 +2,7 @@ import { ActionIcon, Anchor, Container, createStyles, Group, Header as HeaderWra
 import { CartIcon, SignOutIcon } from 'theme/icons';
 import { useCart } from 'core/cart';
 import { useUser } from 'core/user';
-import Image from 'shared/Image';
+import Image from 'shared/components/Image';
 import logoImage from 'theme/images/logo.png';
 import { NavLink } from 'react-router-dom';
 

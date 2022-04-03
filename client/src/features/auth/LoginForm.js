@@ -1,9 +1,9 @@
 import { Button, createStyles, Group, Paper, PasswordInput, Text, TextInput } from '@mantine/core';
 import { useForm, yupResolver } from '@mantine/form';
 import * as yup from 'yup';
-import api from 'core/api';
 import { useUser } from 'core/user';
 import { useNavigate } from 'react-router-dom';
+import { login } from 'shared/api/http/user';
 
 const useStyles = createStyles((theme) => ({
   form: {
@@ -17,8 +17,6 @@ const SCHEMA = yup.object().shape({
   email: yup.string().required('Email is required').email('Invalid email'),
   password: yup.string().required('Password is required'),
 });
-
-const loginWithCredentials = (credentials) => api.post('users/login', credentials).then((x) => x.data);
 
 const LoginForm = () => {
   const { setAccessToken } = useUser();
@@ -36,7 +34,7 @@ const LoginForm = () => {
   const { classes } = useStyles();
 
   const handleLogin = (credentials) =>
-    loginWithCredentials(credentials).then(({ accessToken }) => {
+    login(credentials).then(({ accessToken }) => {
       setAccessToken(accessToken);
       navigate('/', { replace: true });
     });

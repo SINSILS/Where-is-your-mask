@@ -1,6 +1,6 @@
 import fabricMaskImg from 'theme/images/fabric-mask.jpg';
 import birdsMaskImg from 'theme/images/birds-are-leaving.jpg';
-import CollectionsList from 'shared/CollectionsList';
+import CollectionsList from 'shared/components/CollectionsList';
 import { Helmet } from 'react-helmet';
 import { Space, Title } from '@mantine/core';
 

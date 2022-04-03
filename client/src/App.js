@@ -10,6 +10,9 @@ import CollectionPage from 'pages/collections/CollectionPage';
 import LoginPage from 'pages/admin/LoginPage';
 import CollectionListPage from 'pages/collections/CollectionListPage';
 import { UserProvider, useUser } from 'core/user';
+import ProtectedPage from 'core/ProtectedPage';
+import ModelingConfigurationPage from 'pages/ModelingConfigurationPage';
+import AppQueryProvider from 'shared/api/query-client/AppQueryProvider';
 
 const Routing = () => {
   const { isLoading, isAdmin } = useUser();
@@ -24,8 +27,17 @@ const Routing = () => {
         <Route path="/">
           <Route exact index element={<IndexPage />} />
           <Route path="admin">
-            <Route exact path="login" element={isAdmin ? <Navigate to="/" /> : <LoginPage />} />
             <Route index element={<Navigate to="/admin/login" />} />
+            <Route exact path="login" element={isAdmin ? <Navigate to="/" /> : <LoginPage />} />
+            <Route
+              exact
+              path="configure"
+              element={
+                <ProtectedPage>
+                  <ModelingConfigurationPage />
+                </ProtectedPage>
+              }
+            />
           </Route>
           <Route path="fabric">
             <Route exact path="design" element={<FabricMaskModelingPage />} />
@@ -46,13 +58,15 @@ const Routing = () => {
 const App = () => (
   <MantineProvider theme={THEME} withNormalizeCSS withGlobalStyles>
     <TypographyStylesProvider>
-      <BrowserRouter>
-        <UserProvider>
-          <CartProvider>
-            <Routing />
-          </CartProvider>
-        </UserProvider>
-      </BrowserRouter>
+      <AppQueryProvider>
+        <BrowserRouter>
+          <UserProvider>
+            <CartProvider>
+              <Routing />
+            </CartProvider>
+          </UserProvider>
+        </BrowserRouter>
+      </AppQueryProvider>
     </TypographyStylesProvider>
   </MantineProvider>
 );

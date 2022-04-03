@@ -9,9 +9,11 @@ import {
   Scene,
   TextureLoader,
   WebGLRenderer,
-  Color,
 } from 'three';
-import { Box, Button, createStyles, Group, Paper, Title } from '@mantine/core';
+import { ActionIcon, Box, Button, createStyles, Group, Paper, Title } from '@mantine/core';
+import { useUser } from 'core/user';
+import { EditIcon } from 'theme/icons';
+import { NavLink } from 'react-router-dom';
 
 const otherContentSize = 225;
 const panelWidth = 450;
@@ -27,6 +29,7 @@ const useStyles = createStyles((theme) => ({
     width: '100%',
   },
   modeling: {
+    alignSelf: 'center',
     backgroundColor: theme.colors.gray[0],
   },
   panel: {
@@ -37,12 +40,22 @@ const useStyles = createStyles((theme) => ({
     width: panelWidth,
   },
   title: {
+    alignSelf: 'center',
+    alignItems: 'center',
+    gap: theme.spacing.sm,
+    display: 'flex',
     textAlign: 'center',
     marginTop: '0 !important',
+  },
+  editIcon: {
+    height: 30,
+    width: 24,
   },
 }));
 
 const Modeling = () => {
+  const { isAdmin } = useUser();
+
   const modelingContainerRef = useRef();
   const wrapperRef = useRef();
 
@@ -131,7 +144,14 @@ const Modeling = () => {
         <div ref={modelingContainerRef} style={{ visibility: loadingMaterialsCount === 0 ? 'visible' : 'hidden' }} />
       </Box>
       <Paper className={classes.panel} shadow="md" radius="sm" padding="md" withBorder>
-        <Title className={classes.title}>Customize your mask</Title>
+        <Title className={classes.title}>
+          Customize your mask
+          {isAdmin && (
+            <ActionIcon color="blue" size="md" component={NavLink} to="/admin/configure">
+              <EditIcon className={classes.editIcon} />
+            </ActionIcon>
+          )}
+        </Title>
         <Button size="lg" color="teal" fullWidth>
           Continue
         </Button>

@@ -1,8 +1,8 @@
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import storage from 'core/storage';
 import { useMount } from 'react-use';
-import api from 'core/api';
 import { useNavigate } from 'react-router-dom';
+import { getCurrentUser } from 'shared/api/http/user';
 
 const context = createContext({
   isAdmin: false,
@@ -24,8 +24,7 @@ export const UserProvider = ({ children }) => {
 
   useMount(() => {
     if (isLoading) {
-      api
-        .get('users/me')
+      getCurrentUser()
         .then(() => setIsAdmin(true))
         .catch(() => setIsAdmin(false))
         .finally(() => setIsLoading(false));

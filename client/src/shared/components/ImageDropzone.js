@@ -1,8 +1,8 @@
 import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
 import { createStyles, Group, Space, Text } from '@mantine/core';
 import { CircledCheckIcon, CircledCrossIcon, FileImageIcon } from 'theme/icons';
-import api from 'core/api';
 import config from 'core/config';
+import { uploadImage } from 'shared/api/http/images';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -21,18 +21,10 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const uploadFile = (file) => {
-  const form = new FormData();
-
-  form.append('file', file);
-
-  return api.post('images/', form).then((x) => x.data);
-};
-
 const ImageDropzone = ({ onUpload }) => {
   const { classes, cx } = useStyles();
 
-  const handleDrop = (files) => uploadFile(files[0]).then(onUpload);
+  const handleDrop = (files) => uploadImage(files[0]).then(onUpload);
 
   const handleReject = () => {
     // TODO: show error popup if image is too large

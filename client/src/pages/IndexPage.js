@@ -3,7 +3,7 @@ import { Group, Space, Title } from '@mantine/core';
 import MaskTypeCard from 'features/landing/MaskTypeCard';
 import fabricMaskImg from 'theme/images/fabric-mask.jpg';
 import medicalMaskImg from 'theme/images/medical-mask.jpg';
-import CollectionsList from 'shared/CollectionsList';
+import CollectionsList from 'shared/components/CollectionsList';
 
 const IndexPage = () => (
   <>
