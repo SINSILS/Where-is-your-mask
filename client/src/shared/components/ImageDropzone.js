@@ -6,8 +6,11 @@ import { uploadImage } from 'shared/api/http/images';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
-    minHeight: 220,
+    minHeight: 196,
     pointerEvents: 'none',
+  },
+  withError: {
+    border: `2px dashed ${theme.colors.red[5]}`,
   },
   imageIcon: {
     height: 80,
@@ -21,7 +24,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const ImageDropzone = ({ onUpload }) => {
+const ImageDropzone = ({ onUpload, hasError }) => {
   const { classes, cx } = useStyles();
 
   const handleDrop = (files) => uploadImage(files[0]).then(onUpload);
@@ -36,6 +39,7 @@ const ImageDropzone = ({ onUpload }) => {
       onReject={handleReject}
       accept={[MIME_TYPES.jpeg, MIME_TYPES.png]}
       maxSize={config.maxImageSizeMb * 1024 ** 3}
+      className={hasError ? classes.withError : undefined}
     >
       {(status) => {
         const Icon = status.accepted ? CircledCheckIcon : status.rejected ? CircledCrossIcon : FileImageIcon;
@@ -51,7 +55,7 @@ const ImageDropzone = ({ onUpload }) => {
                 )}
               />
               <Space h="md" />
-              <Text size="xl" inline>
+              <Text size="md" inline>
                 Drag an image here or click to select a file
               </Text>
               <Text size="sm" color="dimmed" inline mt={7}>

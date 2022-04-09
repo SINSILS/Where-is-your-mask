@@ -24,8 +24,8 @@ import {
 } from 'shared/api/http/configuration';
 import ImageDropzone from 'shared/components/ImageDropzone';
 import Image from 'shared/components/Image';
-import config from 'core/config';
 import DeleteButtonBadge from 'shared/components/DeleteButtonBadge';
+import { localImageSrc } from 'core/images';
 
 const useStyles = createStyles({
   sticker: {
@@ -108,7 +108,7 @@ const ModelingConfigurationPage = () => {
             >
               {configuration.stickers.map((imageId, index) => (
                 <Box key={imageId} className={classes.sticker}>
-                  <Image src={`${config.apiUrl}/images/${imageId}`} alt={`Sticker ${index + 1}`} height={230} />
+                  <Image src={localImageSrc(imageId)} alt={`Sticker ${index + 1}`} height={230} />
                   <DeleteButtonBadge onClick={() => removeStickerMutation.mutate(imageId)} />
                 </Box>
               ))}

@@ -9,6 +9,7 @@ from app.core import config
 from app.features.images import router as images_router
 from app.features.users import router as users_router, service as users_service, UserCredentials
 from app.features.configuration import router as configuration_router
+from app.features.collections import router as collections_router
 from app.models.common import Model
 
 
@@ -29,6 +30,7 @@ app.add_middleware(
 app.include_router(images_router)
 app.include_router(users_router)
 app.include_router(configuration_router)
+app.include_router(collections_router)
 
 
 @AuthJWT.load_config
