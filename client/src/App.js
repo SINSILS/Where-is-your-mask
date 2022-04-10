@@ -13,6 +13,7 @@ import { UserProvider, useUser } from 'core/user';
 import ProtectedPage from 'core/ProtectedPage';
 import ModelingConfigurationPage from 'pages/ModelingConfigurationPage';
 import AppQueryProvider from 'shared/api/query-client/AppQueryProvider';
+import ModelReviewPage from 'pages/ModelReviewPage';
 
 const Routing = () => {
   const { isLoading, isAdmin } = useUser();
@@ -26,6 +27,7 @@ const Routing = () => {
       <Routes>
         <Route path="/">
           <Route exact index element={<IndexPage />} />
+          <Route exact path="review" element={<ModelReviewPage />} />
           <Route path="admin">
             <Route index element={<Navigate to="/admin/login" />} />
             <Route exact path="login" element={isAdmin ? <Navigate to="/" /> : <LoginPage />} />

@@ -1,6 +1,5 @@
 from fastapi import APIRouter, UploadFile, HTTPException
-from fastapi.params import File, Depends
-from fastapi_jwt_auth import AuthJWT
+from fastapi.params import File
 from starlette.responses import Response
 
 import app.features.images.service as images_service
@@ -20,10 +19,8 @@ def get_image(image_id: ObjectId):
 
 
 @router.post('/')
-async def upload_image(file: UploadFile = File(...), authorize: AuthJWT = Depends()):
-    authorize.jwt_required()
-
-    if file.content_type not in ('image/jpeg', 'image/png'):
-        raise HTTPException(status_code=401)
+async def upload_image(file: UploadFile = File(...)):
+    if file.content_type not in ('image/jpeg', 'image/png', 'application/octet-stream'):
+        raise HTTPException(status_code=400)
 
     return images_service.upload_image(await file.read(), file.content_type)

@@ -10,10 +10,12 @@ import {
   TextureLoader,
   WebGLRenderer,
 } from 'three';
-import { ActionIcon, Box, Button, createStyles, Group, Paper, Title } from '@mantine/core';
+import { ActionIcon, Box, Button, createStyles, Group, LoadingOverlay, Paper, Title } from '@mantine/core';
 import { useUser } from 'core/user';
 import { EditIcon } from 'theme/icons';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { uploadImage } from 'shared/api/http/images';
+import useCurrentModel from 'core/currentModel';
 
 const otherContentSize = 225;
 const panelWidth = 450;
@@ -27,6 +29,9 @@ const useStyles = createStyles((theme) => ({
     justifyContent: 'space-between',
     height: `calc(100vh - ${otherContentSize - contentGap}px)`,
     width: '100%',
+  },
+  wrapperHidden: {
+    opacity: 0,
   },
   modeling: {
     alignSelf: 'center',
@@ -54,14 +59,60 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const Modeling = () => {
+  const navigate = useNavigate();
+
   const { isAdmin } = useUser();
 
   const modelingContainerRef = useRef();
   const wrapperRef = useRef();
 
-  const [loadingMaterialsCount, setLoadingMaterialsCount] = useState(2);
+  const rendererRef = useRef();
+  const cameraRef = useRef();
+  const orbitControlsRef = useRef();
 
-  const { classes } = useStyles();
+  const currentModel = useCurrentModel();
+
+  const [loadingMaterialsCount, setLoadingMaterialsCount] = useState(2);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { classes, cx } = useStyles();
+
+  const handleModelSave = async () => {
+    setIsLoading(true);
+
+    const cameraPositions = [
+      [3, 3, 3],
+      [4, 1, 0],
+      [0, 0, 5],
+    ];
+
+    const imagesDataUrls = [];
+
+    orbitControlsRef.current.enabled = false;
+
+    for (const position of cameraPositions) {
+      cameraRef.current.position.set(...position);
+      cameraRef.current.lookAt(orbitControlsRef.current.target);
+
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+
+      imagesDataUrls.push(rendererRef.current.domElement.toDataURL());
+    }
+
+    const images = await Promise.all(
+      imagesDataUrls.map((url) =>
+        fetch(url)
+          .then((img) => img.blob())
+          .then((blob) => uploadImage(new File([blob], 'mask'))),
+      ),
+    );
+
+    currentModel.setCurrentModel({
+      imageIds: images.map((i) => i.id),
+    });
+
+    navigate('/review');
+  };
 
   useEffect(() => {
     const getModelSize = () => {
@@ -80,7 +131,11 @@ const Modeling = () => {
     const camera = new PerspectiveCamera(4);
     camera.position.set(3, 3, 3);
 
-    const renderer = new WebGLRenderer({ alpha: true, antialias: true });
+    const renderer = new WebGLRenderer({
+      alpha: true,
+      antialias: true,
+      preserveDrawingBuffer: true,
+    });
     const rendererSize = getModelSize();
     renderer.setSize(rendererSize.width, rendererSize.height);
     renderer.setPixelRatio(window.devicePixelRatio);
@@ -113,7 +168,6 @@ const Modeling = () => {
       new TextureLoader().load('/models/material/outer-fabric-new.jpeg', (texture) => {
         mask.scene.getObjectByName('main_Design_area').material.map = texture;
         mask.scene.getObjectByName('main_Design_area').material.color.set('#485754');
-        console.log(mask.scene.getObjectByName('main_Design_area'));
         setLoadingMaterialsCount((prev) => prev - 1);
       });
     });
@@ -132,6 +186,10 @@ const Modeling = () => {
     animate();
     window.addEventListener('resize', handleResize, { passive: true });
 
+    rendererRef.current = renderer;
+    cameraRef.current = camera;
+    orbitControlsRef.current = orbitControls;
+
     return () => {
       renderer.domElement.remove();
       window.removeEventListener('resize', handleResize);
@@ -139,24 +197,27 @@ const Modeling = () => {
   }, []);
 
   return (
-    <Group ref={wrapperRef} className={classes.wrapper}>
-      <Box className={classes.modeling}>
-        <div ref={modelingContainerRef} style={{ visibility: loadingMaterialsCount === 0 ? 'visible' : 'hidden' }} />
-      </Box>
-      <Paper className={classes.panel} shadow="md" radius="sm" padding="md" withBorder>
-        <Title className={classes.title}>
-          Customize your mask
-          {isAdmin && (
-            <ActionIcon color="blue" size="md" component={NavLink} to="/admin/configure">
-              <EditIcon className={classes.editIcon} />
-            </ActionIcon>
-          )}
-        </Title>
-        <Button size="lg" color="teal" fullWidth>
-          Continue
-        </Button>
-      </Paper>
-    </Group>
+    <>
+      <LoadingOverlay visible={isLoading} />
+      <Group ref={wrapperRef} className={cx(classes.wrapper, isLoading && classes.wrapperHidden)}>
+        <Box className={classes.modeling}>
+          <div ref={modelingContainerRef} style={{ visibility: loadingMaterialsCount === 0 ? 'visible' : 'hidden' }} />
+        </Box>
+        <Paper className={classes.panel} shadow="md" radius="sm" padding="md" withBorder>
+          <Title className={classes.title}>
+            Customize your mask
+            {isAdmin && (
+              <ActionIcon color="blue" size="md" component={NavLink} to="/admin/configure">
+                <EditIcon className={classes.editIcon} />
+              </ActionIcon>
+            )}
+          </Title>
+          <Button size="lg" color="teal" fullWidth onClick={handleModelSave}>
+            Continue
+          </Button>
+        </Paper>
+      </Group>
+    </>
   );
 };
 

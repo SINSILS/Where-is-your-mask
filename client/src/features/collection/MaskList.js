@@ -1,7 +1,8 @@
-import { Button, SimpleGrid, Text, Card, Title, Modal, Group, NumberInput, Space, createStyles } from '@mantine/core';
+import { Button, SimpleGrid, Text, Card, Title, Group, createStyles } from '@mantine/core';
 import Image from 'shared/components/Image';
 import { useState } from 'react';
 import { useCart } from 'core/cart';
+import OrderMasksModal from 'shared/components/OrderMasksModal';
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -21,26 +22,14 @@ const MaskList = ({ masks }) => {
 
   return (
     <>
-      <Modal
-        overlayOpacity={0.35}
+      <OrderMasksModal
         opened={opened}
         onClose={() => setOpened(false)}
-        title="How many masks do you want to order?"
-      >
-        <NumberInput label="Quantity" placeholder="Quantity" max={999} min={1} defaultValue={1} />
-        <Space h="md" />
-        <Group position="center">
-          <Button
-            variant="light"
-            onClick={() => {
-              addToCart({});
-              setOpened(false);
-            }}
-          >
-            Add to cart!
-          </Button>
-        </Group>
-      </Modal>
+        onAddToCart={() => {
+          addToCart({});
+          setOpened(false);
+        }}
+      />
       <SimpleGrid
         cols={4}
         spacing="lg"
