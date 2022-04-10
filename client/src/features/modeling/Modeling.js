@@ -70,7 +70,7 @@ const Modeling = () => {
   const rendererRef = useRef();
   const cameraRef = useRef();
   const orbitControlsRef = useRef();
-  const sceneRef=useRef();
+  const sceneRef = useRef();
 
   const currentModel = useCurrentModel();
 
@@ -118,7 +118,7 @@ const Modeling = () => {
 
   const changeColor = (color) => {
     sceneRef.current.getObjectByName('main_Design_area').material.color.set(color);
-  }
+  };
 
   useEffect(() => {
     const getModelSize = () => {
@@ -203,11 +203,11 @@ const Modeling = () => {
     };
   }, []);
 
-  const { data: configuration } = useConfigurationQuery();
+  const { data: configuration, isLoading: isLoadingConfiguration } = useConfigurationQuery();
 
   return (
     <>
-      <LoadingOverlay visible={isLoading} />
+      <LoadingOverlay visible={isLoading || isLoadingConfiguration} />
       <Group ref={wrapperRef} className={cx(classes.wrapper, isLoading && classes.wrapperHidden)}>
         <Box className={classes.modeling}>
           <div ref={modelingContainerRef} style={{ visibility: loadingMaterialsCount === 0 ? 'visible' : 'hidden' }} />
@@ -221,12 +221,9 @@ const Modeling = () => {
               </ActionIcon>
             )}
           </Title>
-          <ColorPicker
-            format="hex"
-            onChange={changeColor}
-            withPicker={false}
-            swatches={configuration.colors}
-          />
+          {configuration && (
+            <ColorPicker format="hex" onChange={changeColor} withPicker={false} swatches={configuration.colors} />
+          )}
           <Button size="lg" color="teal" fullWidth onClick={handleModelSave}>
             Continue
           </Button>
