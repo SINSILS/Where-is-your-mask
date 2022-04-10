@@ -3,6 +3,7 @@ import Image from 'shared/components/Image';
 import { useState } from 'react';
 import { useCart } from 'core/cart';
 import OrderMasksModal from 'shared/components/OrderMasksModal';
+import { localImageSrc } from 'core/images';
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -42,7 +43,7 @@ const MaskList = ({ masks }) => {
         {masks.map((x) => (
           <Card key={x.id} shadow="sm" className={classes.card}>
             <Card.Section>
-              <Image src={x.imageSrc} alt={x.name} fit="contain" height={250} />
+              <Image src={localImageSrc(x.imageId)} alt={x.name} fit="contain" height={250} />
             </Card.Section>
             <Title weight={600} order={3} className={classes.cardTitle}>
               {x.name}
