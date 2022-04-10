@@ -10,12 +10,13 @@ import {
   TextureLoader,
   WebGLRenderer,
 } from 'three';
-import { ActionIcon, Box, Button, createStyles, Group, LoadingOverlay, Paper, Title } from '@mantine/core';
+import { ActionIcon, Box, Button, createStyles, Group, LoadingOverlay, Paper, Title, ColorPicker } from '@mantine/core';
 import { useUser } from 'core/user';
 import { EditIcon } from 'theme/icons';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { uploadImage } from 'shared/api/http/images';
 import useCurrentModel from 'core/currentModel';
+import useConfigurationQuery from 'shared/api/configuration/useConfigurationQuery';
 
 const otherContentSize = 225;
 const panelWidth = 450;
@@ -69,6 +70,7 @@ const Modeling = () => {
   const rendererRef = useRef();
   const cameraRef = useRef();
   const orbitControlsRef = useRef();
+  const sceneRef=useRef();
 
   const currentModel = useCurrentModel();
 
@@ -113,6 +115,10 @@ const Modeling = () => {
 
     navigate('/review');
   };
+
+  const changeColor = (color) => {
+    sceneRef.current.getObjectByName('main_Design_area').material.color.set(color);
+  }
 
   useEffect(() => {
     const getModelSize = () => {
@@ -189,12 +195,15 @@ const Modeling = () => {
     rendererRef.current = renderer;
     cameraRef.current = camera;
     orbitControlsRef.current = orbitControls;
+    sceneRef.current = scene;
 
     return () => {
       renderer.domElement.remove();
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  const { data: configuration } = useConfigurationQuery();
 
   return (
     <>
@@ -212,6 +221,12 @@ const Modeling = () => {
               </ActionIcon>
             )}
           </Title>
+          <ColorPicker
+            format="hex"
+            onChange={changeColor}
+            withPicker={false}
+            swatches={configuration.colors}
+          />
           <Button size="lg" color="teal" fullWidth onClick={handleModelSave}>
             Continue
           </Button>
