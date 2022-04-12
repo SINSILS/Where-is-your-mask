@@ -3,6 +3,7 @@ import storage from 'core/storage';
 import { useMount } from 'react-use';
 import { useNavigate } from 'react-router-dom';
 import { getCurrentUser } from 'shared/api/http/user';
+import useNotification from 'core/notification';
 
 const context = createContext({
   isAdmin: false,
@@ -17,6 +18,8 @@ export const useUser = () => useContext(context);
 const setAccessToken = (token) => storage.setItem(accessTokenStorageKey, token);
 
 export const UserProvider = ({ children }) => {
+  const { showSuccessNotification } = useNotification();
+
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(() => !!storage.getItem(accessTokenStorageKey));
 
@@ -35,7 +38,8 @@ export const UserProvider = ({ children }) => {
     storage.removeItem(accessTokenStorageKey);
     setIsAdmin(false);
     navigate('/');
-  }, [navigate]);
+    showSuccessNotification({ message: 'Logged out successfully' });
+  }, [showSuccessNotification, navigate]);
 
   const handleSetAccessToken = useCallback((token) => {
     setAccessToken(token);

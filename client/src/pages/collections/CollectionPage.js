@@ -7,6 +7,7 @@ import { useUser } from 'core/user';
 import { useState } from 'react';
 import CreateMaskModal from 'features/collection/CreateMaskModal';
 import useMutateCreateMask from 'shared/api/collections/useMutateCreateMask';
+import useNotification from 'core/notification';
 
 const useStyles = createStyles({
   title: {
@@ -15,6 +16,8 @@ const useStyles = createStyles({
 });
 
 const CollectionPage = () => {
+  const { showSuccessNotification, showErrorNotification } = useNotification();
+
   const { collectionId } = useParams();
 
   const { isAdmin } = useUser();
@@ -23,7 +26,13 @@ const CollectionPage = () => {
 
   const { data: collection, isLoading } = useCollectionQuery(collectionId);
   const createMaskMutation = useMutateCreateMask({
-    onSuccess: () => setIsCreateMaskModalOpen(false),
+    onSuccess: () => {
+      setIsCreateMaskModalOpen(false);
+      showSuccessNotification({ message: 'New mask added successfully' });
+    },
+    onError: () => {
+      showErrorNotification({ message: 'Failed to add a new mask' });
+    },
   });
 
   const { classes } = useStyles();

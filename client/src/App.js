@@ -1,4 +1,5 @@
 import { LoadingOverlay, MantineProvider, TypographyStylesProvider } from '@mantine/core';
+import { NotificationsProvider } from '@mantine/notifications';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { THEME } from 'theme/theme';
 import Layout from 'features/layout/Layout';
@@ -60,15 +61,17 @@ const Routing = () => {
 const App = () => (
   <MantineProvider theme={THEME} withNormalizeCSS withGlobalStyles>
     <TypographyStylesProvider>
-      <AppQueryProvider>
-        <BrowserRouter>
-          <UserProvider>
-            <CartProvider>
-              <Routing />
-            </CartProvider>
-          </UserProvider>
-        </BrowserRouter>
-      </AppQueryProvider>
+      <NotificationsProvider autoClose={4000} position="top-right">
+        <AppQueryProvider>
+          <BrowserRouter>
+            <UserProvider>
+              <CartProvider>
+                <Routing />
+              </CartProvider>
+            </UserProvider>
+          </BrowserRouter>
+        </AppQueryProvider>
+      </NotificationsProvider>
     </TypographyStylesProvider>
   </MantineProvider>
 );

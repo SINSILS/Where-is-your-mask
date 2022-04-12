@@ -43,7 +43,7 @@ const MaskList = ({ masks }) => {
         {masks.map((x) => (
           <Card key={x.id} shadow="sm" className={classes.card}>
             <Card.Section>
-              <Image src={localImageSrc(x.imageId)} alt={x.name} fit="contain" height={250} />
+              <Image src={localImageSrc(x.imageId)} alt={x.name} fit="cover" height={250} />
             </Card.Section>
             <Title weight={600} order={3} className={classes.cardTitle}>
               {x.name}

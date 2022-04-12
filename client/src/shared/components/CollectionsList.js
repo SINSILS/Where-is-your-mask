@@ -7,6 +7,7 @@ import useMutateCreateCollection from 'shared/api/collections/useMutateCreateCol
 import { useState } from 'react';
 import { useUser } from 'core/user';
 import { localImageSrc } from 'core/images';
+import useNotification from 'core/notification';
 
 const BOX_SIZE = 250;
 const BORDER_SIZE = 2;
@@ -91,13 +92,19 @@ const useStyles = createStyles((theme, _params, getRef) => {
 });
 
 const CollectionsList = ({ preview }) => {
+  const { showSuccessNotification, showErrorNotification } = useNotification();
+
   const { isAdmin } = useUser();
 
   const [isCreateCollectionModalOpen, setIsCreateCollectionModalOpen] = useState(false);
 
   const { data: collections = [], isLoading } = useCollectionsQuery();
   const createCollectionMutation = useMutateCreateCollection({
-    onSuccess: () => setIsCreateCollectionModalOpen(false),
+    onSuccess: () => {
+      setIsCreateCollectionModalOpen(false);
+      showSuccessNotification({ message: 'New collection created successfully' });
+    },
+    onError: () => showErrorNotification({ message: 'Failed to create a collection' }),
   });
 
   const { classes } = useStyles();

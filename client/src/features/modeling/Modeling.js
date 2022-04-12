@@ -17,6 +17,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { uploadImage } from 'shared/api/http/images';
 import useCurrentModel from 'core/currentModel';
 import useConfigurationQuery from 'shared/api/configuration/useConfigurationQuery';
+import useNotification from 'core/notification';
 
 const otherContentSize = 225;
 const panelWidth = 450;
@@ -60,6 +61,8 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const Modeling = () => {
+  const { showErrorNotification } = useNotification();
+
   const navigate = useNavigate();
 
   const { isAdmin } = useUser();
@@ -101,19 +104,23 @@ const Modeling = () => {
       imagesDataUrls.push(rendererRef.current.domElement.toDataURL());
     }
 
-    const images = await Promise.all(
-      imagesDataUrls.map((url) =>
-        fetch(url)
-          .then((img) => img.blob())
-          .then((blob) => uploadImage(new File([blob], 'mask'))),
-      ),
-    );
+    try {
+      const images = await Promise.all(
+        imagesDataUrls.map((url) =>
+          fetch(url)
+            .then((img) => img.blob())
+            .then((blob) => uploadImage(new File([blob], 'mask'))),
+        ),
+      );
 
-    currentModel.setCurrentModel({
-      imageIds: images.map((i) => i.id),
-    });
+      currentModel.setCurrentModel({
+        imageIds: images.map((i) => i.id),
+      });
 
-    navigate('/review');
+      navigate('/review');
+    } catch {
+      showErrorNotification({ message: 'Failed to create a mask' });
+    }
   };
 
   const changeColor = (color) => {

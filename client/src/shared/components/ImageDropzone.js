@@ -3,6 +3,7 @@ import { createStyles, Group, Space, Text } from '@mantine/core';
 import { CircledCheckIcon, CircledCrossIcon, FileImageIcon } from 'theme/icons';
 import config from 'core/config';
 import { uploadImage } from 'shared/api/http/images';
+import useNotification from 'core/notification';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -25,13 +26,16 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const ImageDropzone = ({ onUpload, hasError }) => {
+  const { showErrorNotification } = useNotification();
+
   const { classes, cx } = useStyles();
 
   const handleDrop = (files) => uploadImage(files[0]).then(onUpload);
 
-  const handleReject = () => {
-    // TODO: show error popup if image is too large
-  };
+  const handleReject = () =>
+    showErrorNotification({
+      message: `Selected image is invalid. Only jpg or png images under ${config.maxImageSizeMb}MB in size are supported`,
+    });
 
   return (
     <Dropzone

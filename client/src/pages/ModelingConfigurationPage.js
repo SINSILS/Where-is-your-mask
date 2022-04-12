@@ -26,6 +26,7 @@ import ImageDropzone from 'shared/components/ImageDropzone';
 import Image from 'shared/components/Image';
 import DeleteButtonBadge from 'shared/components/DeleteButtonBadge';
 import { localImageSrc } from 'core/images';
+import useNotification from 'core/notification';
 
 const useStyles = createStyles({
   sticker: {
@@ -34,7 +35,10 @@ const useStyles = createStyles({
 });
 
 const ModelingConfigurationPage = () => {
+  const { showErrorNotification, showSuccessNotification } = useNotification();
+
   const [selectedColor, setSelectedColor] = useState('');
+  const [hasError, setHasError] = useState(false);
 
   const { data: configuration } = useConfigurationQuery();
 
@@ -42,11 +46,38 @@ const ModelingConfigurationPage = () => {
     onSettled: () => {
       setSelectedColor('');
     },
+    onSuccess: () => {
+      showSuccessNotification({ message: 'New color added successfully' });
+    },
+    onError: () => {
+      showErrorNotification({ message: 'Failed to add new color' });
+    },
   });
-  const removeColorMutation = useMutateConfiguration(removeColorFromConfiguration);
+  const removeColorMutation = useMutateConfiguration(removeColorFromConfiguration, {
+    onSuccess: () => {
+      showSuccessNotification({ message: 'Color removed successfully' });
+    },
+    onError: () => {
+      showErrorNotification({ message: 'Failed to remove the color' });
+    },
+  });
 
-  const addStickerMutation = useMutateConfiguration(addStickerToConfiguration);
-  const removeStickerMutation = useMutateConfiguration(removeStickerFromConfiguration);
+  const addStickerMutation = useMutateConfiguration(addStickerToConfiguration, {
+    onSuccess: () => {
+      showSuccessNotification({ message: 'New sticker added successfully' });
+    },
+    onError: () => {
+      showErrorNotification({ message: 'Failed to add new sticker' });
+    },
+  });
+  const removeStickerMutation = useMutateConfiguration(removeStickerFromConfiguration, {
+    onSuccess: () => {
+      showSuccessNotification({ message: 'Sticker removed successfully' });
+    },
+    onError: () => {
+      showErrorNotification({ message: 'Failed to add new sticker' });
+    },
+  });
 
   const { classes } = useStyles();
 
@@ -74,13 +105,17 @@ const ModelingConfigurationPage = () => {
                 placeholder="Pick color"
                 label="Add new color"
                 value={selectedColor}
-                onChange={setSelectedColor}
+                onChange={(color) => {
+                  setSelectedColor(color);
+                  setHasError(false);
+                }}
+                error={hasError ? 'Color is required' : undefined}
               />
               <Space h="xs" />
               <Button
                 fullWidth
                 loading={addColorMutation.isLoading}
-                onClick={() => addColorMutation.mutate(selectedColor)}
+                onClick={() => (selectedColor ? addColorMutation.mutate(selectedColor) : setHasError(true))}
               >
                 Save
               </Button>

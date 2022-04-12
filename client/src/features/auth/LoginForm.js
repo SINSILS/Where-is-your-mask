@@ -4,6 +4,7 @@ import * as yup from 'yup';
 import { useUser } from 'core/user';
 import { useNavigate } from 'react-router-dom';
 import { login } from 'shared/api/http/user';
+import useNotification from 'core/notification';
 
 const useStyles = createStyles((theme) => ({
   form: {
@@ -19,6 +20,8 @@ const SCHEMA = yup.object().shape({
 });
 
 const LoginForm = () => {
+  const { showSuccessNotification, showErrorNotification } = useNotification();
+
   const { setAccessToken } = useUser();
 
   const navigate = useNavigate();
@@ -34,14 +37,17 @@ const LoginForm = () => {
   const { classes } = useStyles();
 
   const handleLogin = (credentials) =>
-    login(credentials).then(({ accessToken }) => {
-      setAccessToken(accessToken);
-      navigate('/', { replace: true });
-    });
+    login(credentials)
+      .then(({ accessToken }) => {
+        setAccessToken(accessToken);
+        navigate('/', { replace: true });
+        showSuccessNotification({ message: 'Logged in as admin' });
+      })
+      .catch(() => showErrorNotification({ message: 'Invalid credentials' }));
 
   return (
     <Paper shadow="xs" mx="auto" mt={100} className={classes.form}>
-      <form onSubmit={form.onSubmit(handleLogin)} >
+      <form onSubmit={form.onSubmit(handleLogin)}>
         <Text weight={600} size="lg" mb="md">
           Login as an Administrator
         </Text>
