@@ -30,7 +30,10 @@ const ImageDropzone = ({ onUpload, hasError }) => {
 
   const { classes, cx } = useStyles();
 
-  const handleDrop = (files) => uploadImage(files[0]).then(onUpload);
+  const handleDrop = (files) =>
+    uploadImage(files[0])
+      .then(onUpload)
+      .catch(() => showErrorNotification({ message: 'Failed to upload an image' }));
 
   const handleReject = () =>
     showErrorNotification({

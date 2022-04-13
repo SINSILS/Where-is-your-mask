@@ -10,9 +10,7 @@ const useAppQuery = (...props) => {
   useEffect(() => {
     if (queryResult.isError) {
       showErrorNotification({
-        title: 'Error occurred',
         message: 'Unknown error occurred. Please try again later.',
-        color: 'red',
       });
     }
   }, [showErrorNotification, queryResult.isError]);
