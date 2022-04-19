@@ -4,6 +4,7 @@ export {
   IoIosCloseCircleOutline as CircledCrossIcon,
   IoIosClose as CloseIcon,
   IoMdImages as ImagesIcon,
+  IoIosAdd as AddIcon
 } from 'react-icons/io';
 export { VscSignOut as SignOutIcon } from 'react-icons/vsc';
 export { MdModeEditOutline as EditIcon } from 'react-icons/md';

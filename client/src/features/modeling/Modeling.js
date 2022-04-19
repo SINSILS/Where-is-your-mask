@@ -3,24 +3,28 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader';
 import {
   AmbientLight,
+  Euler,
+  Mesh,
   MeshBasicMaterial,
+  MeshPhongMaterial,
   PerspectiveCamera,
   PointLight,
   Scene,
   TextureLoader,
+  Vector3,
   WebGLRenderer,
 } from 'three';
-import { ActionIcon, Box, Button, createStyles, Group, LoadingOverlay, Paper, Title, ColorPicker } from '@mantine/core';
-import { useUser } from 'core/user';
-import { EditIcon } from 'theme/icons';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { Box, createStyles, Group, LoadingOverlay} from '@mantine/core';
+import { useNavigate } from 'react-router-dom';
 import { uploadImage } from 'shared/api/http/images';
 import useCurrentModel from 'core/currentModel';
-import useConfigurationQuery from 'shared/api/configuration/useConfigurationQuery';
 import useNotification from 'core/notification';
+import { DecalGeometry } from 'three/examples/jsm/geometries/DecalGeometry';
+import ModelingPanel, { PANEL_WIDTH } from 'features/modeling/ModelingPanel';
+import { localImageSrc } from 'core/images';
+import { IMAGE_JUSTIFY } from 'features/modeling/enums';
 
 const otherContentSize = 225;
-const panelWidth = 450;
 const contentGap = 50;
 
 const useStyles = createStyles((theme) => ({
@@ -38,34 +42,16 @@ const useStyles = createStyles((theme) => ({
   modeling: {
     alignSelf: 'center',
     backgroundColor: theme.colors.gray[0],
-  },
-  panel: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    height: '100%',
-    width: panelWidth,
-  },
-  title: {
-    alignSelf: 'center',
-    alignItems: 'center',
-    gap: theme.spacing.sm,
-    display: 'flex',
-    textAlign: 'center',
-    marginTop: '0 !important',
-  },
-  editIcon: {
-    height: 30,
-    width: 24,
+    position: 'relative',
   },
 }));
+
+const createImageName = (id) => `image-${id}`;
 
 const Modeling = () => {
   const { showErrorNotification } = useNotification();
 
   const navigate = useNavigate();
-
-  const { isAdmin } = useUser();
 
   const modelingContainerRef = useRef();
   const wrapperRef = useRef();
@@ -123,13 +109,68 @@ const Modeling = () => {
     }
   };
 
-  const changeColor = (color) => {
+  const handleChangeColor = (color) => {
     sceneRef.current.getObjectByName('main_Design_area').material.color.set(color);
+  };
+
+  const createImageGeometry = (configuration) => {
+    const position = (() => {
+      switch (configuration.justify) {
+        case IMAGE_JUSTIFY.left:
+          return new Vector3(-0.045, 0);
+
+        case IMAGE_JUSTIFY.right:
+          return new Vector3(0.045, 0);
+
+        default:
+          return new Vector3();
+      }
+    })();
+
+    const size =
+      configuration.justify === IMAGE_JUSTIFY.stretch ? 0.15 + 0.05 * configuration.size : 0.0125 * configuration.size;
+
+    return new DecalGeometry(
+      sceneRef.current.getObjectByName('main_Design_area'),
+      position,
+      new Euler(0, 0, configuration.rotation * 3.6 * (Math.PI / 180)),
+      new Vector3(size, size, 1),
+    );
+  };
+
+  const handleAddImage = (configuration) => {
+    new TextureLoader().load(localImageSrc(configuration.imageId), (texture) => {
+      const material = new MeshPhongMaterial({
+        map: texture,
+        shininess: 0,
+        transparent: true,
+        depthTest: true,
+        depthWrite: false,
+        polygonOffset: true,
+        polygonOffsetFactor: -1,
+        wireframe: false,
+      });
+      const mesh = new Mesh(createImageGeometry(configuration), material);
+
+      mesh.name = createImageName(configuration.id);
+
+      sceneRef.current.add(mesh);
+    });
+  };
+
+  const handleUpdateImage = (configuration) => {
+    const image = sceneRef.current.getObjectByName(createImageName(configuration.id));
+
+    image.geometry = createImageGeometry(configuration);
+  };
+
+  const handleRemoveImage = (id) => {
+    sceneRef.current.remove(sceneRef.current.getObjectByName(createImageName(id)));
   };
 
   useEffect(() => {
     const getModelSize = () => {
-      const width = wrapperRef.current.clientWidth - panelWidth - contentGap;
+      const width = wrapperRef.current.clientWidth - PANEL_WIDTH - contentGap;
       const height = window.innerHeight - otherContentSize;
       const size = Math.min(width, height, 800);
 
@@ -210,33 +251,20 @@ const Modeling = () => {
     };
   }, []);
 
-  const { data: configuration, isLoading: isLoadingConfiguration } = useConfigurationQuery();
-
   return (
-    <>
-      <LoadingOverlay visible={isLoading || isLoadingConfiguration} />
-      <Group ref={wrapperRef} className={cx(classes.wrapper, isLoading && classes.wrapperHidden)}>
-        <Box className={classes.modeling}>
-          <div ref={modelingContainerRef} style={{ visibility: loadingMaterialsCount === 0 ? 'visible' : 'hidden' }} />
-        </Box>
-        <Paper className={classes.panel} shadow="md" radius="sm" padding="md" withBorder>
-          <Title className={classes.title}>
-            Customize your mask
-            {isAdmin && (
-              <ActionIcon color="blue" size="md" component={NavLink} to="/admin/configure">
-                <EditIcon className={classes.editIcon} />
-              </ActionIcon>
-            )}
-          </Title>
-          {configuration && (
-            <ColorPicker format="hex" onChange={changeColor} withPicker={false} swatches={configuration.colors} />
-          )}
-          <Button size="lg" color="teal" fullWidth onClick={handleModelSave}>
-            Continue
-          </Button>
-        </Paper>
-      </Group>
-    </>
+    <Group ref={wrapperRef} className={cx(classes.wrapper, isLoading && classes.wrapperHidden)}>
+      <Box className={classes.modeling}>
+        <div ref={modelingContainerRef} style={{ visibility: loadingMaterialsCount === 0 ? 'visible' : 'hidden' }} />
+        <LoadingOverlay visible={isLoading} />
+      </Box>
+      <ModelingPanel
+        onColorChange={handleChangeColor}
+        onAddImage={handleAddImage}
+        onUpdateImage={handleUpdateImage}
+        onRemoveImage={handleRemoveImage}
+        onModelSave={handleModelSave}
+      />
+    </Group>
   );
 };
 
