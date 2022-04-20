@@ -14,6 +14,7 @@ import { EditIcon } from 'theme/icons';
 import useConfigurationQuery from 'shared/api/configuration/useConfigurationQuery';
 import { useUser } from 'core/user';
 import StickersSelection from 'features/modeling/StickersSelection';
+import ImagesSelection from 'features/modeling/ImagesSelection';
 
 export const PANEL_WIDTH = 450;
 
@@ -27,7 +28,7 @@ const useStyles = createStyles((theme) => ({
     position: 'relative',
   },
   panelContent: {
-    maxHeight: 'calc(100% - 65px)'
+    maxHeight: 'calc(100% - 65px)',
   },
   selections: {
     maxHeight: 'calc(100% - 72px)',
@@ -70,7 +71,13 @@ const ModelingPanel = ({ onColorChange, onAddImage, onUpdateImage, onRemoveImage
         {configuration && (
           <Accordion initialItem={0} multiple iconPosition="right" className={classes.selections}>
             <Accordion.Item label="Mask Color">
-              <ColorPicker format="hex" size="xl" onChange={onColorChange} withPicker={false} swatches={configuration.colors} />
+              <ColorPicker
+                format="hex"
+                size="xl"
+                onChange={onColorChange}
+                withPicker={false}
+                swatches={configuration.colors}
+              />
             </Accordion.Item>
             <Accordion.Item label="Stickers">
               <StickersSelection
@@ -79,6 +86,9 @@ const ModelingPanel = ({ onColorChange, onAddImage, onUpdateImage, onRemoveImage
                 onUpdateSticker={onUpdateImage}
                 onRemoveSticker={onRemoveImage}
               />
+            </Accordion.Item>
+            <Accordion.Item label="Images">
+              <ImagesSelection onAddImage={onAddImage} onUpdateImage={onUpdateImage} onRemoveImage={onRemoveImage} />
             </Accordion.Item>
           </Accordion>
         )}
