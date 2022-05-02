@@ -15,6 +15,9 @@ uuid = "^1.30"
 fastapi-jwt-auth = "^0.5.0"
 stringcase = "^1.2.0"
 websockets = "^10.3"
+opencv-python = "^4.5.5"
+numpy = "^1.22.3"
+mediapipe = "^0.8.9"
 
 [tool.poetry.dev-dependencies]
 

@@ -1,12 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import useNotification from 'core/notification';
 import { Group, LoadingOverlay } from '@mantine/core';
-import { useUnmount } from 'react-use';
+import { useLatest, useUnmount } from 'react-use';
 import config from 'core/config';
+import useCurrentModel from 'core/currentModel';
 
-const SOCKET_FREQUENCY = 80;
+const SOCKET_FREQUENCY = 90;
 
 const ReviewOnFace = () => {
+  const { model: currentModel } = useCurrentModel();
+  const currentModelRef = useLatest(currentModel);
+
   const { showErrorNotification } = useNotification();
 
   const [isLoadingWebcam, setIsLoadingWebcam] = useState(true);
@@ -28,8 +32,6 @@ const ReviewOnFace = () => {
   };
 
   const handleInputVideoLoad = () => {
-    setIsLoadingWebcam(false);
-
     inputCanvasRef.current.width = inputVideoRef.current.videoWidth;
     inputCanvasRef.current.height = inputVideoRef.current.videoHeight;
 
@@ -44,6 +46,10 @@ const ReviewOnFace = () => {
     });
 
     socketRef.current.addEventListener('open', () => {
+      setIsLoadingWebcam(false);
+
+      socketRef.current.send(currentModelRef.current.imageIds[currentModelRef.current.imageIds.length - 1]);
+
       videoStreamIntervalRef.current = setInterval(() => {
         inputCanvasRef.current
           .getContext('2d')
