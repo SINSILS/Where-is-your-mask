@@ -16,6 +16,7 @@ import ModelingConfigurationPage from 'pages/ModelingConfigurationPage';
 import AppQueryProvider from 'shared/api/query-client/AppQueryProvider';
 import ModelReviewPage from 'pages/ModelReviewPage';
 import CartPage from 'pages/CartPage';
+import PaymentPage from 'pages/PaymentPage';
 
 const Routing = () => {
   const { isLoading, isAdmin } = useUser();
@@ -31,6 +32,7 @@ const Routing = () => {
           <Route exact index element={<IndexPage />} />
           <Route exact path="review" element={<ModelReviewPage />} />
           <Route exact path="cart" element={<CartPage />} />
+          <Route exact path="payment" element={<PaymentPage />} />
           <Route path="admin">
             <Route index element={<Navigate to="/admin/login" />} />
             <Route exact path="login" element={isAdmin ? <Navigate to="/" /> : <LoginPage />} />
