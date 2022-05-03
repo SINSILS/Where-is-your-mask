@@ -14,7 +14,7 @@ import {
   Vector3,
   WebGLRenderer,
 } from 'three';
-import { Box, createStyles, Group, LoadingOverlay} from '@mantine/core';
+import { Box, createStyles, Group, LoadingOverlay } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 import { uploadImage } from 'shared/api/http/images';
 import useCurrentModel from 'core/currentModel';
@@ -101,6 +101,7 @@ const Modeling = () => {
 
       currentModel.setCurrentModel({
         imageIds: images.map((i) => i.id),
+        price: 15,
       });
 
       navigate('/review');

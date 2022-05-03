@@ -70,7 +70,7 @@ const Header = (props) => {
           </Anchor>
         </Group>
         <Group>
-          <ActionIcon color="blue" size="lg" className={classes.cartContainer}>
+          <ActionIcon component={NavLink} to="/cart" color="blue" size="lg" className={classes.cartContainer}>
             <span className={cx(classes.cartSize, cartItemsCount > 0 && classes.cartSizeNonEmpty)}>
               {cartItemsCount}
             </span>

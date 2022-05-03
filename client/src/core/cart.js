@@ -7,6 +7,11 @@ const cartContext = createContext(undefined);
 
 const storageKey = 'cart';
 
+export const CART_ITEM_TYPE = {
+  custom: 'custom',
+  collection: 'collection',
+};
+
 export const useCart = () => useContext(cartContext);
 
 export const CartProvider = ({ children }) => {
@@ -19,16 +24,21 @@ export const CartProvider = ({ children }) => {
   }, [cartItems]);
 
   const addToCart = useCallback(
-    (item) => {
-      setCartItems((prevItems) => [...prevItems, item]);
+    (type, quantity, item) => {
+      setCartItems((prevItems) => [...prevItems, { id: Date.now(), type, quantity, item }]);
       showSuccessNotification({ message: 'Added to cart successfully' });
     },
     [showSuccessNotification],
   );
 
+  const updateCartItem = useCallback(
+    (item) => setCartItems((prevItems) => prevItems.map((x) => (x.id === item.id ? item : x))),
+    [],
+  );
+
   const removeFromCart = useCallback(
-    (index) => {
-      setCartItems((prevItems) => prevItems.filter((_, i) => i !== index));
+    (id) => {
+      setCartItems((prevItems) => prevItems.filter((x) => x.id !== id));
       showSuccessNotification({ message: 'Removed from cart successfully' });
     },
     [showSuccessNotification],
@@ -38,9 +48,10 @@ export const CartProvider = ({ children }) => {
     () => ({
       items: cartItems,
       add: addToCart,
+      update: updateCartItem,
       remove: removeFromCart,
     }),
-    [addToCart, cartItems, removeFromCart],
+    [addToCart, cartItems, removeFromCart, updateCartItem],
   );
 
   return <cartContext.Provider value={context}>{children}</cartContext.Provider>;
