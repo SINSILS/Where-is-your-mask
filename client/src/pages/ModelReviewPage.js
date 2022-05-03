@@ -5,7 +5,7 @@ import { CameraIcon, CartIcon, ImagesIcon } from 'theme/icons';
 import ImagesReview from 'features/review/ImagesReview';
 import OrderMasksModal from 'shared/components/OrderMasksModal';
 import { useState } from 'react';
-import { useCart } from 'core/cart';
+import { CART_ITEM_TYPE, useCart } from 'core/cart';
 import { Navigate, useNavigate } from 'react-router-dom';
 import ReviewOnFace from 'features/review/ReviewOnFace';
 
@@ -18,8 +18,8 @@ const ModelReviewPage = () => {
 
   const [currentTab, setCurrentTab] = useState(0);
 
-  const handleAddToCart = () => {
-    addToCart({});
+  const handleAddToCart = ({ quantity }) => {
+    addToCart(CART_ITEM_TYPE.custom, quantity, currentModel);
     clearCurrentModel();
     navigate('/');
   };
