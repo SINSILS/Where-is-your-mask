@@ -1,12 +1,13 @@
 import { Helmet } from 'react-helmet';
 import { Space, Tabs, Title } from '@mantine/core';
 import useCurrentModel from 'core/currentModel';
-import { CartIcon, ImagesIcon } from 'theme/icons';
+import { CameraIcon, CartIcon, ImagesIcon } from 'theme/icons';
 import ImagesReview from 'features/review/ImagesReview';
 import OrderMasksModal from 'shared/components/OrderMasksModal';
 import { useState } from 'react';
-import { useCart } from 'core/cart';
+import { CART_ITEM_TYPE, useCart } from 'core/cart';
 import { Navigate, useNavigate } from 'react-router-dom';
+import ReviewOnFace from 'features/review/ReviewOnFace';
 
 const ModelReviewPage = () => {
   const navigate = useNavigate();
@@ -17,8 +18,8 @@ const ModelReviewPage = () => {
 
   const [currentTab, setCurrentTab] = useState(0);
 
-  const handleAddToCart = () => {
-    addToCart({});
+  const handleAddToCart = ({ quantity }) => {
+    addToCart(CART_ITEM_TYPE.custom, quantity, currentModel);
     clearCurrentModel();
     navigate('/');
   };
@@ -37,6 +38,9 @@ const ModelReviewPage = () => {
       <Tabs active={currentTab} onTabChange={setCurrentTab}>
         <Tabs.Tab label="Images" icon={<ImagesIcon size={18} />}>
           <ImagesReview model={currentModel} />
+        </Tabs.Tab>
+        <Tabs.Tab label="On Face" icon={<CameraIcon size={18} />}>
+          <ReviewOnFace />
         </Tabs.Tab>
         <Tabs.Tab label="Purchase" icon={<CartIcon size={18} />}>
           <OrderMasksModal opened onClose={() => setCurrentTab(0)} onAddToCart={handleAddToCart} />

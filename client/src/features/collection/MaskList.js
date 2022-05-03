@@ -1,7 +1,7 @@
 import { Button, SimpleGrid, Text, Card, Title, Group, createStyles } from '@mantine/core';
 import Image from 'shared/components/Image';
 import { useState } from 'react';
-import { useCart } from 'core/cart';
+import { CART_ITEM_TYPE, useCart } from 'core/cart';
 import OrderMasksModal from 'shared/components/OrderMasksModal';
 import { localImageSrc } from 'core/images';
 
@@ -15,21 +15,23 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const MaskList = ({ masks }) => {
-  const [opened, setOpened] = useState(false);
+  const [selectedMaskToOrder, setSelectedMaskToOrder] = useState(null);
 
   const { add: addToCart } = useCart();
 
   const { classes } = useStyles();
 
+  const handleAddToCart = ({ quantity }) => {
+    addToCart(CART_ITEM_TYPE.collection, quantity, selectedMaskToOrder);
+    setSelectedMaskToOrder(null);
+  };
+
   return (
     <>
       <OrderMasksModal
-        opened={opened}
-        onClose={() => setOpened(false)}
-        onAddToCart={() => {
-          addToCart({});
-          setOpened(false);
-        }}
+        opened={!!selectedMaskToOrder}
+        onClose={() => setSelectedMaskToOrder(null)}
+        onAddToCart={handleAddToCart}
       />
       <SimpleGrid
         cols={4}
@@ -51,7 +53,7 @@ const MaskList = ({ masks }) => {
             <Text>{x.description}</Text>
             <Text>{x.price} €</Text>
             <Group position="center">
-              <Button variant="light" fullWidth onClick={() => setOpened(true)}>
+              <Button variant="light" fullWidth onClick={() => setSelectedMaskToOrder(x)}>
                 Choose
               </Button>
             </Group>

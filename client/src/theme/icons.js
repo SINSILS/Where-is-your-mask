@@ -4,8 +4,12 @@ export {
   IoIosCloseCircleOutline as CircledCrossIcon,
   IoIosClose as CloseIcon,
   IoMdImages as ImagesIcon,
-  IoIosAdd as AddIcon
+  IoIosAdd as AddIcon,
 } from 'react-icons/io';
 export { VscSignOut as SignOutIcon } from 'react-icons/vsc';
 export { MdModeEditOutline as EditIcon } from 'react-icons/md';
-export { AiOutlineArrowLeft as ArrowLeftIcon, AiOutlineArrowRight as ArrowRightIcon } from 'react-icons/ai';
+export {
+  AiOutlineArrowLeft as ArrowLeftIcon,
+  AiOutlineArrowRight as ArrowRightIcon,
+  AiOutlineCamera as CameraIcon,
+} from 'react-icons/ai';
