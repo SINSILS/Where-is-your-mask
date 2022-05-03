@@ -44,14 +44,17 @@ export const CartProvider = ({ children }) => {
     [showSuccessNotification],
   );
 
+  const clearCart = useCallback(() => setCartItems([]), []);
+
   const context = useMemo(
     () => ({
       items: cartItems,
       add: addToCart,
       update: updateCartItem,
       remove: removeFromCart,
+      clear: clearCart,
     }),
-    [addToCart, cartItems, removeFromCart, updateCartItem],
+    [addToCart, cartItems, removeFromCart, updateCartItem, clearCart],
   );
 
   return <cartContext.Provider value={context}>{children}</cartContext.Provider>;

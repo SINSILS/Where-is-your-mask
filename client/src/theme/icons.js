@@ -13,3 +13,4 @@ export {
   AiOutlineArrowRight as ArrowRightIcon,
   AiOutlineCamera as CameraIcon,
 } from 'react-icons/ai';
+export { FcApproval as SuccessIcon } from 'react-icons/fc';

@@ -20,7 +20,7 @@ const useStyles = createStyles({
   },
 });
 
-const CartItems = () => {
+const CartItems = ({ onActionButtonClick, actionButtonText = 'Proceed to checkout' }) => {
   const { items, update: updateCartItem, remove: removeFromCart } = useCart();
 
   const { classes } = useStyles();
@@ -85,7 +85,7 @@ const CartItems = () => {
             <Text color="dark" size="xl" weight={600}>
               Total Price: {totalPrice} €
             </Text>
-            <Button variant="outline">Proceed to checkout</Button>
+            <Button variant="outline" onClick={onActionButtonClick}>{actionButtonText}</Button>
           </Group>
         ) : (
           'Products cart is empty'
