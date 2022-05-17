@@ -14,7 +14,7 @@ import {
   Vector3,
   WebGLRenderer,
 } from 'three';
-import { Box, createStyles, Group, LoadingOverlay } from '@mantine/core';
+import { Box, createStyles, Group, LoadingOverlay, Text } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 import { uploadImage } from 'shared/api/http/images';
 import useCurrentModel from 'core/currentModel';
@@ -23,6 +23,8 @@ import { DecalGeometry } from 'three/examples/jsm/geometries/DecalGeometry';
 import ModelingPanel, { PANEL_WIDTH } from 'features/modeling/ModelingPanel';
 import { localImageSrc } from 'core/images';
 import { IMAGE_JUSTIFY } from 'features/modeling/enums';
+import { useMount } from 'react-use';
+import { useModals } from '@mantine/modals';
 
 const otherContentSize = 225;
 const contentGap = 50;
@@ -50,6 +52,7 @@ const createImageName = (id) => `image-${id}`;
 
 const Modeling = () => {
   const { showErrorNotification } = useNotification();
+  const modals = useModals();
 
   const navigate = useNavigate();
 
@@ -168,6 +171,18 @@ const Modeling = () => {
   const handleRemoveImage = (id) => {
     sceneRef.current.remove(sceneRef.current.getObjectByName(createImageName(id)));
   };
+
+  useMount(() => {
+    if (currentModel.model) {
+      modals.openConfirmModal({
+        title: 'Existing custom mask',
+        children: <Text size="sm">It seems that you have already designed a mask. Do you want to review it?</Text>,
+        labels: { confirm: 'Review', cancel: 'Discard' },
+        onConfirm: () => navigate('/review'),
+        onCancel: () => currentModel.clearCurrentModel(),
+      });
+    }
+  });
 
   useEffect(() => {
     const getModelSize = () => {
