@@ -8,6 +8,8 @@ import { useModals } from '@mantine/modals';
 import { useUser } from 'core/user';
 import useNotification from 'core/notification';
 import useMutateDeleteMask from 'shared/api/collections/useMutateDeleteMask';
+import useMutateUpdateMask from 'shared/api/collections/useMutateUpdateMask';
+import CreateMaskModal from 'features/collection/CreateMaskModal';
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -21,14 +23,24 @@ const useStyles = createStyles((theme) => ({
 const MaskList = ({ masks, collectionId }) => {
   const [selectedMaskToOrder, setSelectedMaskToOrder] = useState(null);
 
-  const { showErrorNotification } = useNotification();
+  const { showSuccessNotification, showErrorNotification } = useNotification();
   const modals = useModals();
 
   const { isAdmin } = useUser();
 
+  const [maskToUpdate, setMaskToUpdate] = useState(null);
+
   const { add: addToCart } = useCart();
 
   const { classes } = useStyles();
+
+  const updateMaskMutation = useMutateUpdateMask({
+    onSuccess: () => {
+      setMaskToUpdate(null);
+      showSuccessNotification({ message: 'Mask updated successfully' });
+    },
+    onError: () => showErrorNotification({ message: 'Failed to update the mask' }),
+  });
 
   const deleteMaskMutation = useMutateDeleteMask({
     onError: () => showErrorNotification({ message: 'Failed to delete the mask' }),
@@ -54,6 +66,13 @@ const MaskList = ({ masks, collectionId }) => {
         onClose={() => setSelectedMaskToOrder(null)}
         onAddToCart={handleAddToCart}
       />
+      <CreateMaskModal
+        opened={!!maskToUpdate}
+        initialMask={maskToUpdate}
+        loading={updateMaskMutation.isLoading}
+        onClose={() => setMaskToUpdate(null)}
+        onSubmit={(mask) => updateMaskMutation.mutate({ collectionId, maskId: maskToUpdate.id, mask })}
+      />
       <SimpleGrid
         cols={4}
         spacing="lg"
@@ -77,6 +96,11 @@ const MaskList = ({ masks, collectionId }) => {
               <Button variant="light" fullWidth onClick={() => setSelectedMaskToOrder(x)}>
                 Choose
               </Button>
+              {isAdmin && (
+                <Button variant="default" fullWidth onClick={() => setMaskToUpdate(x)}>
+                  Update Mask
+                </Button>
+              )}
               {isAdmin && (
                 <Button variant="default" fullWidth onClick={() => handleOpenDeletionConfirmationModal(x.id)}>
                   Delete Mask

@@ -92,3 +92,19 @@ def delete_mask(collection_id: ObjectId, mask_id: ObjectId):
             }
         }
     )
+
+
+def update_mask(collection_id: ObjectId, mask_id: ObjectId, mask: CreateMaskRequest):
+    __collections_collection().update_one(
+        {'_id': collection_id, 'masks._id': mask_id},
+        {
+            '$set': {
+                'masks.$': {
+                    '_id': mask_id,
+                    **mask.dict()
+                }
+            }
+        }
+    )
+
+    return Mask(id=mask_id, **mask.dict())

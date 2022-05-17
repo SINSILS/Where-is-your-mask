@@ -46,8 +46,10 @@ const CreateCollectionModal = ({ opened, onClose, onSubmit, loading, initialColl
 
   const { classes } = useStyles();
 
+  const title = initialCollection ? 'Update' : 'Create';
+
   return (
-    <Modal opened={opened} onClose={onClose} title="Create a collection" centered size="xl">
+    <Modal opened={opened} onClose={onClose} title={`${title} a collection`} centered size="xl">
       <LoadingOverlay visible={loading} />
       <form onSubmit={form.onSubmit(onSubmit)}>
         <Group position="apart" align="stretch">
@@ -75,7 +77,7 @@ const CreateCollectionModal = ({ opened, onClose, onSubmit, loading, initialColl
         </Group>
         <Space h="lg" />
         <Group position="right">
-          <Button type="submit">Create</Button>
+          <Button type="submit">{title}</Button>
         </Group>
       </form>
     </Modal>

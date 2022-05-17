@@ -25,9 +25,9 @@ const SCHEMA = yup.object().shape({
   imageId: yup.string().required('Image is required'),
 });
 
-const CreateMaskModal = ({ opened, onClose, onSubmit, loading }) => {
+const CreateMaskModal = ({ opened, onClose, onSubmit, loading, initialMask }) => {
   const form = useForm({
-    initialValues: {
+    initialValues: initialMask ?? {
       name: '',
       description: '',
       price: undefined,
@@ -44,8 +44,10 @@ const CreateMaskModal = ({ opened, onClose, onSubmit, loading }) => {
 
   const { classes } = useStyles();
 
+  const title = initialMask ? 'Update' : 'Create'
+
   return (
-    <Modal opened={opened} onClose={onClose} title="Create a mask" centered size="xl">
+    <Modal opened={opened} onClose={onClose} title={`${title} a mask`} centered size="xl">
       <LoadingOverlay visible={loading} />
       <form onSubmit={form.onSubmit(onSubmit)}>
         <Group position="apart" align="stretch">
@@ -75,7 +77,7 @@ const CreateMaskModal = ({ opened, onClose, onSubmit, loading }) => {
         </Group>
         <Space h="lg" />
         <Group position="right">
-          <Button type="submit">Create</Button>
+          <Button type="submit">{title}</Button>
         </Group>
       </form>
     </Modal>
