@@ -41,3 +41,32 @@ def create_collection(
     authorize.jwt_required()
 
     return collections_service.create_mask(collection_id, create_mask_request)
+
+
+@router.put('/{collection_id}')
+def update_collection(
+    collection_id: ObjectId,
+    update_collection_request: CreateCollectionRequest,
+    authorize: AuthJWT = Depends()
+):
+    authorize.jwt_required()
+
+    return collections_service.update_collection(collection_id, update_collection_request)
+
+
+@router.delete('/{collection_id}')
+def delete_collection(collection_id: ObjectId, authorize: AuthJWT = Depends()):
+    authorize.jwt_required()
+
+    collections_service.delete_collection(collection_id)
+
+    return {'success': True}
+
+
+@router.delete('/{collection_id}/masks/{mask_id}')
+def delete_collection(collection_id: ObjectId, mask_id: ObjectId, authorize: AuthJWT = Depends()):
+    authorize.jwt_required()
+
+    collections_service.delete_mask(collection_id, mask_id)
+
+    return {'success': True}
