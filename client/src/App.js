@@ -13,11 +13,12 @@ import LoginPage from 'pages/admin/LoginPage';
 import CollectionListPage from 'pages/collections/CollectionListPage';
 import { UserProvider, useUser } from 'core/user';
 import ProtectedPage from 'core/ProtectedPage';
-import ModelingConfigurationPage from 'pages/ModelingConfigurationPage';
+import ModelingConfigurationPage from 'pages/admin/ModelingConfigurationPage';
 import AppQueryProvider from 'shared/api/query-client/AppQueryProvider';
 import ModelReviewPage from 'pages/ModelReviewPage';
 import CartPage from 'pages/CartPage';
 import PaymentPage from 'pages/PaymentPage';
+import OrdersListPage from 'pages/admin/OrdersListPage';
 
 const Routing = () => {
   const { isLoading, isAdmin } = useUser();
@@ -37,6 +38,9 @@ const Routing = () => {
           <Route path="admin">
             <Route index element={<Navigate to="/admin/login" />} />
             <Route exact path="login" element={isAdmin ? <Navigate to="/" /> : <LoginPage />} />
+            <Route path="orders">
+              <Route index element={<OrdersListPage />} />
+            </Route>
             <Route
               exact
               path="configure"

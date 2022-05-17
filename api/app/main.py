@@ -12,6 +12,7 @@ from app.features.users import router as users_router, service as users_service,
 from app.features.configuration import router as configuration_router
 from app.features.collections import router as collections_router
 from app.features.review import router as review_router
+from app.features.orders import router as orders_router
 from app.models.common import Model
 
 
@@ -35,6 +36,7 @@ app.include_router(users_router)
 app.include_router(configuration_router)
 app.include_router(collections_router)
 app.include_router(review_router)
+app.include_router(orders_router)
 
 
 @AuthJWT.load_config

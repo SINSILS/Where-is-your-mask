@@ -1,21 +1,33 @@
 import { Helmet } from 'react-helmet';
-import { Anchor, Group, Space, Stepper, Text } from '@mantine/core';
+import { Anchor, Group, LoadingOverlay, Space, Stepper, Text } from '@mantine/core';
 import { useState } from 'react';
 import CartItems from 'features/cart/CartItems';
 import PaymentForm from 'features/payment/PaymentForm';
 import { NavLink } from 'react-router-dom';
 import { SuccessIcon } from 'theme/icons';
 import { useCart } from 'core/cart';
+import { createOrder } from 'shared/api/http/orders';
+import useNotification from 'core/notification';
 
 const PaymentPage = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [isSuccessful, setIsSuccessful] = useState(false);
+  const [isSavingOrder, setIsSavingOrder] = useState(false);
 
-  const { clear: clearCart } = useCart();
+  const { showErrorNotification } = useNotification();
+
+  const { items, clear: clearCart } = useCart();
 
   const handleSubmit = () => {
-    setIsSuccessful(true)
-    clearCart();
+    setIsSavingOrder(true);
+
+    createOrder(items)
+      .then(() => {
+        setIsSuccessful(true);
+        clearCart();
+      })
+      .catch(() => showErrorNotification({ message: 'Failed to create an order' }))
+      .finally(() => setIsSavingOrder(false));
   };
 
   return (
@@ -24,6 +36,7 @@ const PaymentPage = () => {
         <title>Payment - VELK</title>
       </Helmet>
       <Space h="xl" />
+      <LoadingOverlay visible={isSavingOrder} />
       {isSuccessful ? (
         <Group direction="column" align="center" spacing="xs">
           <Space h="xl" />

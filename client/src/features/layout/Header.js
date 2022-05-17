@@ -68,6 +68,11 @@ const Header = (props) => {
           <Anchor component={NavLink} to="/collections">
             Collections
           </Anchor>
+          {isAdmin && (
+            <Anchor component={NavLink} to="/admin/orders">
+              Orders
+            </Anchor>
+          )}
         </Group>
         <Group>
           <ActionIcon component={NavLink} to="/cart" color="blue" size="lg" className={classes.cartContainer}>
