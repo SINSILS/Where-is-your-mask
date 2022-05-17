@@ -4,6 +4,10 @@ import { useState } from 'react';
 import { CART_ITEM_TYPE, useCart } from 'core/cart';
 import OrderMasksModal from 'shared/components/OrderMasksModal';
 import { localImageSrc } from 'core/images';
+import { useModals } from '@mantine/modals';
+import { useUser } from 'core/user';
+import useNotification from 'core/notification';
+import useMutateDeleteMask from 'shared/api/collections/useMutateDeleteMask';
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -14,17 +18,34 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const MaskList = ({ masks }) => {
+const MaskList = ({ masks, collectionId }) => {
   const [selectedMaskToOrder, setSelectedMaskToOrder] = useState(null);
+
+  const { showErrorNotification } = useNotification();
+  const modals = useModals();
+
+  const { isAdmin } = useUser();
 
   const { add: addToCart } = useCart();
 
   const { classes } = useStyles();
 
+  const deleteMaskMutation = useMutateDeleteMask({
+    onError: () => showErrorNotification({ message: 'Failed to delete the mask' }),
+  });
+
   const handleAddToCart = ({ quantity }) => {
     addToCart(CART_ITEM_TYPE.collection, quantity, selectedMaskToOrder);
     setSelectedMaskToOrder(null);
   };
+
+  const handleOpenDeletionConfirmationModal = (maskId) =>
+    modals.openConfirmModal({
+      title: 'Delete this mask?',
+      children: <Text size="sm">Are you sure you want to delete this mask?</Text>,
+      labels: { confirm: 'Confirm', cancel: 'Cancel' },
+      onConfirm: () => deleteMaskMutation.mutate({ collectionId, maskId }),
+    });
 
   return (
     <>
@@ -52,10 +73,15 @@ const MaskList = ({ masks }) => {
             </Title>
             <Text>{x.description}</Text>
             <Text>{x.price} €</Text>
-            <Group position="center">
+            <Group position="center" spacing="xs">
               <Button variant="light" fullWidth onClick={() => setSelectedMaskToOrder(x)}>
                 Choose
               </Button>
+              {isAdmin && (
+                <Button variant="default" fullWidth onClick={() => handleOpenDeletionConfirmationModal(x.id)}>
+                  Delete Mask
+                </Button>
+              )}
             </Group>
           </Card>
         ))}

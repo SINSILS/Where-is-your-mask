@@ -50,6 +50,19 @@ def create_collection(collection: CreateCollectionRequest) -> Collection:
     )
 
 
+def update_collection(collection_id: ObjectId, collection: CreateCollectionRequest) -> Collection:
+    __collections_collection().update_one(
+        {'_id': collection_id},
+        {'$set': collection.dict()}
+    )
+
+    return get_collection(collection_id)
+
+
+def delete_collection(collection_id: ObjectId):
+    __collections_collection().delete_one({'_id': collection_id})
+
+
 def create_mask(collection_id: ObjectId, mask: CreateMaskRequest) -> Mask:
     mask_id = ObjectId()
 
@@ -66,3 +79,16 @@ def create_mask(collection_id: ObjectId, mask: CreateMaskRequest) -> Mask:
     )
 
     return Mask(id=mask_id, **mask.dict())
+
+
+def delete_mask(collection_id: ObjectId, mask_id: ObjectId):
+    __collections_collection().update_one(
+        {'_id': collection_id},
+        {
+            '$pull': {
+                'masks': {
+                    '_id': mask_id
+                }
+            }
+        }
+    )

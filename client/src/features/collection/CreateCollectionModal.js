@@ -28,9 +28,9 @@ const SCHEMA = yup.object().shape({
   imageId: yup.string().required('Image is required'),
 });
 
-const CreateCollectionModal = ({ opened, onClose, onSubmit, loading }) => {
+const CreateCollectionModal = ({ opened, onClose, onSubmit, loading, initialCollection }) => {
   const form = useForm({
-    initialValues: {
+    initialValues: initialCollection ?? {
       name: '',
       description: '',
       imageId: '',
