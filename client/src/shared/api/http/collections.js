@@ -13,4 +13,7 @@ export const deleteCollection = (id) => api.delete(`collections/${id}`);
 export const createMask = (collectionId, mask) =>
   api.post(`collections/${collectionId}/masks`, mask).then((x) => x.data);
 
+export const updateMask = (collectionId, maskId, mask) =>
+  api.put(`collections/${collectionId}/masks/${maskId}`, mask).then((x) => x.data);
+
 export const deleteMask = (collectionId, maskId) => api.delete(`collections/${collectionId}/masks/${maskId}`);
