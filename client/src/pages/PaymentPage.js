@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet';
-import { Anchor, Box, Group, Space, Stepper, Text } from '@mantine/core';
+import { Anchor, Group, Space, Stepper, Text } from '@mantine/core';
 import { useState } from 'react';
 import CartItems from 'features/cart/CartItems';
 import PaymentForm from 'features/payment/PaymentForm';

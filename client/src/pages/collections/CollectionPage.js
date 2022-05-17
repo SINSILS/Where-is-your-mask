@@ -93,9 +93,12 @@ const CollectionPage = () => {
           <Space h="md" />
           {isAdmin && (
             <>
-              <Group>
+              <Group spacing="xs">
                 <Button variant="light" onClick={() => setIsCreateMaskModalOpen(true)}>
                   Create a mask
+                </Button>
+                <Button variant="light" onClick={() => setIsUpdateCollectionModalOpen(true)}>
+                  Edit collection
                 </Button>
                 <Button variant="default" onClick={handleOpenDeletionConfirmationModal}>
                   Delete collection

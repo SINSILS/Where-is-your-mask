@@ -6,7 +6,7 @@ export const getCollection = (id) => api.get(`collections/${id}`).then((x) => x.
 
 export const createCollection = (collection) => api.post('collections/', collection).then((x) => x.data);
 
-export const updateCollection = (id, collection) => api.post(`collections/${id}`, collection).then((x) => x.data);
+export const updateCollection = (id, collection) => api.put(`collections/${id}`, collection).then((x) => x.data);
 
 export const deleteCollection = (id) => api.delete(`collections/${id}`);
 

@@ -75,7 +75,7 @@ const CreateCollectionModal = ({ opened, onClose, onSubmit, loading, initialColl
         </Group>
         <Space h="lg" />
         <Group position="right">
-          <Button type="submit">Create</Button>
+          <Button type="submit">{initialCollection ? 'Update' : 'Create'}</Button>
         </Group>
       </form>
     </Modal>
