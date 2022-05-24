@@ -7,3 +7,4 @@ class Order(Model):
     status: int
     date: datetime
     order: list[dict]
+    shipping_information: dict
