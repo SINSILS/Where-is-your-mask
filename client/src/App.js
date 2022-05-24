@@ -19,6 +19,7 @@ import ModelReviewPage from 'pages/ModelReviewPage';
 import CartPage from 'pages/CartPage';
 import PaymentPage from 'pages/PaymentPage';
 import OrdersListPage from 'pages/admin/OrdersListPage';
+import OrderPage from 'pages/admin/OrderPage';
 
 const Routing = () => {
   const { isLoading, isAdmin } = useUser();
@@ -40,6 +41,7 @@ const Routing = () => {
             <Route exact path="login" element={isAdmin ? <Navigate to="/" /> : <LoginPage />} />
             <Route path="orders">
               <Route index element={<OrdersListPage />} />
+              <Route path=":orderId" element={<OrderPage />} />
             </Route>
             <Route
               exact

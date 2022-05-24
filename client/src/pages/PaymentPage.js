@@ -18,10 +18,10 @@ const PaymentPage = () => {
 
   const { items, clear: clearCart } = useCart();
 
-  const handleSubmit = () => {
+  const handleSubmit = (shippingInformation) => {
     setIsSavingOrder(true);
 
-    createOrder(items)
+    createOrder({ items, shipping_information: shippingInformation })
       .then(() => {
         setIsSuccessful(true);
         clearCart();
